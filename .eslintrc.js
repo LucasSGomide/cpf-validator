@@ -28,8 +28,10 @@ module.exports = {
         ],
         '@typescript-eslint/comma-dangle': 'off',
         '@typescript-eslint/lines-between-class-members': 'off',
+        '@typescript-eslint/no-unused-vars': 'warn',
         'import/prefer-default-export': 'off',
         'implicit-arrow-linebreak': 'off',
+        'class-methods-use-this': 'off',
     },
     settings: {
         'import/resolver': {
