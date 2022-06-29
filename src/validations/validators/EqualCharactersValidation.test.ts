@@ -1,5 +1,5 @@
 import { EqualCharactersValidation } from './EqualCharactersValidation'
-import { InvalidFieldError } from './errors/InvalidFieldError'
+import { InvalidFieldError } from '../errors/InvalidFieldError'
 
 const makeSut = (field: string = 'ANY_FIELD') =>
     new EqualCharactersValidation(field)

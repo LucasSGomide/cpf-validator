@@ -1,4 +1,4 @@
-import { InvalidFieldError } from './errors/InvalidFieldError'
+import { InvalidFieldError } from '../errors/InvalidFieldError'
 import { StringValidation } from './StringValidation'
 
 const makeSut = (field: string = 'ANY_FIELD') => new StringValidation(field)

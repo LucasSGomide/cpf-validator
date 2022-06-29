@@ -1,4 +1,4 @@
-import { InvalidFieldError } from './errors/InvalidFieldError'
+import { InvalidFieldError } from '../errors/InvalidFieldError'
 import { MinLengthValidation } from './MinLengthValidation'
 
 const makeSut = (field: string = 'ANY_FIELD') =>

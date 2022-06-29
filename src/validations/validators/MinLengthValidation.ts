@@ -1,5 +1,5 @@
-import { InvalidFieldError } from './errors/InvalidFieldError'
-import { IValidation } from './protocols/IValidation'
+import { InvalidFieldError } from '../errors/InvalidFieldError'
+import { IValidation } from '../protocols/IValidation'
 
 export class MinLengthValidation implements IValidation {
     constructor(readonly field: string, private minLength: number) {}

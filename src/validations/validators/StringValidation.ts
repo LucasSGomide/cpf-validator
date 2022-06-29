@@ -1,5 +1,5 @@
-import { InvalidFieldError } from './errors/InvalidFieldError'
-import { IValidation } from './protocols/IValidation'
+import { InvalidFieldError } from '../errors/InvalidFieldError'
+import { IValidation } from '../protocols/IValidation'
 
 export class StringValidation implements IValidation {
     constructor(readonly field: string) {}
