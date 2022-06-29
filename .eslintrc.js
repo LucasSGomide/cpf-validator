@@ -32,6 +32,7 @@ module.exports = {
         'import/prefer-default-export': 'off',
         'implicit-arrow-linebreak': 'off',
         'class-methods-use-this': 'off',
+        'operator-linebreak': 'off',
     },
     settings: {
         'import/resolver': {

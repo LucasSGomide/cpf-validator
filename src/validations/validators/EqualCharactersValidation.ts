@@ -4,8 +4,6 @@ import { IValidation } from '../protocols/IValidation'
 export class EqualCharactersValidation implements IValidation {
     private valueArray: string[] = []
 
-    constructor(readonly field: string) {}
-
     execute(value: string): Error {
         this.valueArray = value.split('')
         const firstCharacter = this.valueArray[0]
@@ -14,7 +12,7 @@ export class EqualCharactersValidation implements IValidation {
             (character) => character === firstCharacter
         )
 
-        if (isEqualCharacters) throw new InvalidFieldError(this.field)
+        if (isEqualCharacters) throw new InvalidFieldError()
         return null
     }
 }

@@ -1,7 +1,7 @@
 import { InvalidFieldError } from '../errors/InvalidFieldError'
 import { StringValidation } from './StringValidation'
 
-const makeSut = (field: string = 'ANY_FIELD') => new StringValidation(field)
+const makeSut = () => new StringValidation()
 
 describe('FieldTypeValidation', () => {
     test('Deve retornar null se o campo for válido', () => {
@@ -13,14 +13,13 @@ describe('FieldTypeValidation', () => {
     })
 
     test('Deve lançar InvalidFieldError se o campo for inválido', () => {
-        const field = 'ANY_FIELD'
-        const sut = makeSut(field)
+        const sut = makeSut()
 
         try {
             sut.execute(10)
         } catch (error) {
             expect(error).toBeInstanceOf(InvalidFieldError)
-            expect(error.message).toBe(`Invalid ${field} field.`)
+            expect(error.message).toBe('Invalid field.')
         }
     })
 })
