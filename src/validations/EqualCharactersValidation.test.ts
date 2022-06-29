@@ -1,12 +1,20 @@
 import { EqualCharactersValidation } from './EqualCharactersValidation'
+import { InvalidFieldError } from './errors/InvalidFieldError'
 
-const makeSut = () => new EqualCharactersValidation('ANY_FIELD')
+const makeSut = (field: string = 'ANY_FIELD') =>
+    new EqualCharactersValidation(field)
 
 describe('EqualCharactersValidation', () => {
     test('Deve lançar erro todos os caracteres forem iguais', () => {
-        const sut = makeSut()
+        const field = 'ANY_FIELD'
+        const sut = makeSut(field)
 
-        expect(() => sut.execute('aaa')).toThrow()
+        try {
+            sut.execute('aaa')
+        } catch (error) {
+            expect(error).toBeInstanceOf(InvalidFieldError)
+            expect(error.message).toBe(`Invalid ${field} field.`)
+        }
     })
     test('Deve retornar null se existirem caracteres diferentes', () => {
         const sut = makeSut()
