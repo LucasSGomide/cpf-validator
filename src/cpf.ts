@@ -1,15 +1,19 @@
 // @ts-nocheck
-function validate(str) {
-    if (str !== null) {
-        if (str !== undefined) {
-            if (str.length >= 11 || str.length <= 14) {
-                str = str
+export function cpfValidation(cpfValidation) {
+    if (cpfValidation !== null) {
+        if (cpfValidation !== undefined) {
+            if (cpfValidation.length >= 11 || cpfValidation.length <= 14) {
+                cpfValidation = cpfValidation
                     .replace('.', '')
                     .replace('.', '')
                     .replace('-', '')
                     .replace(' ', '')
 
-                if (!str.split('').every((c) => c === str[0])) {
+                if (
+                    !cpfValidation
+                        .split('')
+                        .every((c) => c === cpfValidation[0])
+                ) {
                     try {
                         let d1
                         let d2
@@ -23,14 +27,16 @@ function validate(str) {
 
                         for (
                             let nCount = 1;
-                            nCount < str.length - 1;
+                            nCount < cpfValidation.length - 1;
                             nCount++
                         ) {
                             // if (isNaN(parseInt(str.substring(nCount -1, nCount)))) {
                             // 	return false;
                             // } else {
 
-                            digito = parseInt(str.substring(nCount - 1, nCount))
+                            digito = parseInt(
+                                cpfValidation.substring(nCount - 1, nCount)
+                            )
                             d1 += (11 - nCount) * digito
 
                             d2 += (12 - nCount) * digito
@@ -38,16 +44,15 @@ function validate(str) {
                         }
 
                         rest = d1 % 11
-
                         dg1 = rest < 2 ? (dg1 = 0) : 11 - rest
                         d2 += 2 * dg1
                         rest = d2 % 11
                         if (rest < 2) dg2 = 0
                         else dg2 = 11 - rest
 
-                        const nDigVerific = str.substring(
-                            str.length - 2,
-                            str.length
+                        const nDigVerific = cpfValidation.substring(
+                            cpfValidation.length - 2,
+                            cpfValidation.length
                         )
                         nDigResult = `${dg1}${dg2}`
                         return nDigVerific == nDigResult
