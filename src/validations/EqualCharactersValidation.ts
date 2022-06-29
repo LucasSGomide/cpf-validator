@@ -1,3 +1,4 @@
+import { InvalidFieldError } from './errors/InvalidFieldError'
 import { IValidation } from './protocols/IValidation'
 
 export class EqualCharactersValidation implements IValidation {
@@ -13,7 +14,7 @@ export class EqualCharactersValidation implements IValidation {
             (character) => character === firstCharacter
         )
 
-        if (isEqualCharacters) throw new Error(`Invalid ${this.field} field.`)
+        if (isEqualCharacters) throw new InvalidFieldError(this.field)
         return null
     }
 }
