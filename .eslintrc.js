@@ -29,6 +29,7 @@ module.exports = {
         '@typescript-eslint/comma-dangle': 'off',
         '@typescript-eslint/lines-between-class-members': 'off',
         'import/prefer-default-export': 'off',
+        'implicit-arrow-linebreak': 'off',
     },
     settings: {
         'import/resolver': {
