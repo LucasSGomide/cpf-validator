@@ -1,68 +1,74 @@
 // @ts-nocheck
-export function cpfValidation(cpfValidation) {
-    if (cpfValidation !== null) {
-        if (cpfValidation !== undefined) {
-            if (cpfValidation.length >= 11 || cpfValidation.length <= 14) {
-                cpfValidation = cpfValidation
-                    .replace('.', '')
-                    .replace('.', '')
-                    .replace('-', '')
-                    .replace(' ', '')
 
-                if (
-                    !cpfValidation
-                        .split('')
-                        .every((c) => c === cpfValidation[0])
-                ) {
-                    try {
-                        let d1
-                        let d2
-                        let dg1
-                        let dg2
-                        let rest
-                        let digito
-                        let nDigResult
-                        d1 = d2 = 0
-                        dg1 = dg2 = rest = 0
+function removesCpfSpecialCharacters(cpf) {
+    const handledCpf = cpf
+        .replace('.', '')
+        .replace('.', '')
+        .replace('-', '')
+        .replace(' ', '')
 
-                        for (
-                            let nCount = 1;
-                            nCount < cpfValidation.length - 1;
-                            nCount++
-                        ) {
-                            // if (isNaN(parseInt(str.substring(nCount -1, nCount)))) {
-                            // 	return false;
-                            // } else {
+    return handledCpf
+}
 
-                            digito = parseInt(
-                                cpfValidation.substring(nCount - 1, nCount)
-                            )
-                            d1 += (11 - nCount) * digito
+function isEqualDigits(cpf) {
+    const cpfCharacters = cpf.split('')
+    const firstCharacter = cpfCharacters[0]
 
-                            d2 += (12 - nCount) * digito
-                            // }
-                        }
+    return cpfCharacters.every((character) => character === firstCharacter)
+}
 
-                        rest = d1 % 11
-                        dg1 = rest < 2 ? (dg1 = 0) : 11 - rest
-                        d2 += 2 * dg1
-                        rest = d2 % 11
-                        if (rest < 2) dg2 = 0
-                        else dg2 = 11 - rest
+function isString(cpf) {
+    return typeof cpf === 'string'
+}
 
-                        const nDigVerific = cpfValidation.substring(
-                            cpfValidation.length - 2,
-                            cpfValidation.length
-                        )
-                        nDigResult = `${dg1}${dg2}`
-                        return nDigVerific == nDigResult
-                    } catch (e) {
-                        console.error(`Erro !${e}`)
+function getArrayFromFirstNineDigits(cpf) {
+    const firstIndex = 0
+    const secondIndex = cpf.length - 2
 
-                        return false
-                    }
-                } else return false
-            } else return false
-        }
-    } else return false
+    return cpf.substring(firstIndex, secondIndex).split('')
+}
+
+function getLastTwoDigits(cpf) {
+    const firstIndex = cpf.length - 2
+    const secondIndex = cpf.length
+
+    return cpf.substring(firstIndex, secondIndex)
+}
+
+function calculatesValidDigits(digitsArr) {
+    const cpfLength = 11
+
+    const { firstTotal, secondTotal } = digitsArr.reduce(
+        (acc, digit, index) => {
+            const firstMultiplier = cpfLength - 1 - index
+            const secondMultiplier = cpfLength - index
+
+            acc.firstTotal = acc.firstTotal += firstMultiplier * digit
+            acc.secondTotal = acc.secondTotal += secondMultiplier * digit
+
+            return acc
+        },
+
+        { firstTotal: 0, secondTotal: 0 }
+    )
+
+    const firstRemainder = firstTotal % cpfLength
+    const validatedFirstDigit =
+        firstRemainder < 2 ? 0 : cpfLength - firstRemainder
+
+    const secondRemainder = (secondTotal + validatedFirstDigit * 2) % cpfLength
+    const validatedSecondDigit =
+        secondRemainder < 2 ? 0 : cpfLength - secondRemainder
+
+    return `${validatedFirstDigit}${validatedSecondDigit}`
+}
+
+export function cpfValidation(cpf) {
+    if (!cpf || !isString(cpf)) return false
+    const handledCpf = removesCpfSpecialCharacters(cpf)
+    if (isEqualDigits(handledCpf) || handledCpf.length !== 11) return false
+    const fistNineDigitsArr = getArrayFromFirstNineDigits(handledCpf)
+    const validDigits = calculatesValidDigits(fistNineDigitsArr)
+    const digitsToCheck = getLastTwoDigits(handledCpf)
+    return validDigits === digitsToCheck
 }
