@@ -16,23 +16,18 @@ export class CpfValidation implements ICpfValidation {
     execute(cpf: string): Error {
         this.cpf = this.sanitizeCpf(cpf)
         this.validators.forEach((validator) => validator.execute(this.cpf))
-
         const { firstSegment, digitsToValidate } = this.segragateCpf()
         const { validDigits } = this.calculatesValidDigits(firstSegment)
-
         if (validDigits !== digitsToValidate) throw new InvalidFieldError()
-
         return null
     }
 
     private sanitizeCpf(value) {
-        const sanitizedCpf = value
+        return value
             .replace('.', '')
             .replace('.', '')
             .replace('-', '')
             .replace(' ', '')
-
-        return sanitizedCpf
     }
 
     private segragateCpf(): {
@@ -53,20 +48,16 @@ export class CpfValidation implements ICpfValidation {
             (acc, digit, index) => {
                 const firstMultiplier = this.cpfLength - 1 - index
                 const secondMultiplier = this.cpfLength - index
-
                 acc.firstTotal = acc.firstTotal +=
                     firstMultiplier * parseInt(digit, 10)
                 acc.secondTotal = acc.secondTotal +=
                     secondMultiplier * parseInt(digit, 10)
-
                 return acc
             },
-
             { firstTotal: 0, secondTotal: 0 }
         )
         const firstDigit = this.calculatesFirsDigit(firstTotal)
         const secondDigit = this.calculatesSecondDigit(firstDigit, secondTotal)
-
         return { validDigits: `${firstDigit}${secondDigit}` }
     }
 
