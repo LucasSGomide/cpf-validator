@@ -1,6 +1,7 @@
 ## CPF Validation Refactor
 
-Refactor challenge from Branas.io CleanCode and CleanArchitecture course.
+-   Refactor challenge from [Branas.io](https://app.branas.io/public/products) CleanCode and CleanArchitecture course.
+    -   [CPF Algorithm](https://www.macoratti.net/alg_cpf.htm)
 
 ### Function to Refactor:
 
