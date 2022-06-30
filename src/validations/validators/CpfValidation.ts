@@ -7,7 +7,7 @@ export class CpfValidation implements ICpfValidation {
     private readonly cpfDigits = 2
     public cpf: string = ''
 
-    constructor(public validators: IValidation[] = []) {}
+    constructor(public validators: IValidation[]) {}
 
     static build(validators: IValidation[]) {
         return new CpfValidation(validators)
