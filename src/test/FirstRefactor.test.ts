@@ -1,4 +1,4 @@
-import { cpfValidation } from '../cpf'
+import { cpfValidation } from '../FirstRefactor'
 
 describe('CPF', () => {
     test('Deve retornar true para um cpf válido', () => {
