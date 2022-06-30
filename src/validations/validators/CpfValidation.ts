@@ -4,7 +4,7 @@ import { IValidation } from '../protocols/IValidation'
 
 export class CpfValidation implements ICpfValidation {
     private readonly cpfLength = 11
-    private readonly cpfDigits = 2
+    private readonly numberOfDigits = 2
     public cpf: string = ''
 
     constructor(public validators: IValidation[]) {}
@@ -35,7 +35,7 @@ export class CpfValidation implements ICpfValidation {
         digitsToValidate: string
     } {
         const firstIndex = 0
-        const digitsIndex = this.cpfLength - this.cpfDigits
+        const digitsIndex = this.cpfLength - this.numberOfDigits
         const firstSegment = this.cpf
             .substring(firstIndex, digitsIndex)
             .split('')
