@@ -33,6 +33,7 @@ module.exports = {
         'implicit-arrow-linebreak': 'off',
         'class-methods-use-this': 'off',
         'operator-linebreak': 'off',
+        'no-multi-assign': 'off',
     },
     settings: {
         'import/resolver': {
