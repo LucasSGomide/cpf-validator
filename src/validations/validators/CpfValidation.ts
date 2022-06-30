@@ -22,7 +22,7 @@ export class CpfValidation implements ICpfValidation {
         return null
     }
 
-    private sanitizeCpf(value) {
+    private sanitizeCpf(value: string): string {
         return value
             .replace('.', '')
             .replace('.', '')
@@ -43,7 +43,9 @@ export class CpfValidation implements ICpfValidation {
         return { firstSegment, digitsToValidate }
     }
 
-    private calculatesValidDigits(firstSegment: string[]) {
+    private calculatesValidDigits(firstSegment: string[]): {
+        validDigits: string
+    } {
         const { firstTotal, secondTotal } = firstSegment.reduce(
             (acc, digit, index) => {
                 const firstMultiplier = this.cpfLength - 1 - index
@@ -74,7 +76,7 @@ export class CpfValidation implements ICpfValidation {
         return this.getValidDigit(remainder)
     }
 
-    private getValidDigit(remainder: number) {
+    private getValidDigit(remainder: number): number {
         return remainder < 2 ? 0 : this.cpfLength - remainder
     }
 }
