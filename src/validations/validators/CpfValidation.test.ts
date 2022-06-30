@@ -9,6 +9,16 @@ const makeSut = () =>
         new EqualCharactersValidation(),
     ])
 
+const testInvalidCpf = (sut: CpfValidation, cpf: string) => {
+    try {
+        sut.execute(cpf)
+        throw new Error('Teste Inválido')
+    } catch (err) {
+        expect(err).toBeInstanceOf(InvalidFieldError)
+        expect(err.message).toBe('Invalid field.')
+    }
+}
+
 describe('CpfValidation', () => {
     test('Deve retornar null se o cpf for válido', () => {
         const sut = makeSut()
@@ -20,37 +30,36 @@ describe('CpfValidation', () => {
 
     test('Deve retornar InvalidFieldError se o cpf for inválido', () => {
         const sut = makeSut()
+        const cpf = '061.813.806-45'
 
-        try {
-            sut.execute('1234567891')
-            throw new Error('061.813.806-45')
-        } catch (err) {
-            expect(err).toBeInstanceOf(InvalidFieldError)
-            expect(err.message).toBe('Invalid field.')
-        }
+        testInvalidCpf(sut, cpf)
+    })
+
+    test('Deve retornar false para um cpf inválido em que o primeiro digito deveria ser 0', () => {
+        const sut = makeSut()
+        const cpf = '061.813.100-48'
+
+        testInvalidCpf(sut, cpf)
+    })
+
+    test('Deve retornar false para um cpf inválido em que o segundo digito deveria ser 0', () => {
+        const sut = makeSut()
+        const cpf = '011.111.100-48'
+
+        testInvalidCpf(sut, cpf)
     })
 
     test('Deve lançar InvalidFieldError se o cpf não tiver ao menos 11 caracteres', () => {
         const sut = makeSut()
+        const cpf = '1234567891'
 
-        try {
-            sut.execute('1234567891')
-            throw new Error('Teste Inválido')
-        } catch (err) {
-            expect(err).toBeInstanceOf(InvalidFieldError)
-            expect(err.message).toBe('Invalid field.')
-        }
+        testInvalidCpf(sut, cpf)
     })
 
     test('Deve lançar InvalidFieldError se o cpf tiver somente caracteres repetidos com caracteres especiais', () => {
         const sut = makeSut()
+        const cpf = '111.111.111-11'
 
-        try {
-            sut.execute('111.111.111-11')
-            throw new Error('Teste Inválido')
-        } catch (err) {
-            expect(err).toBeInstanceOf(InvalidFieldError)
-            expect(err.message).toBe('Invalid field.')
-        }
+        testInvalidCpf(sut, cpf)
     })
 })
