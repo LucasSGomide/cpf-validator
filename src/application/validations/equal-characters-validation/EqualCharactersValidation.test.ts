@@ -1,5 +1,5 @@
+import { InvalidFieldError } from '@domain/errors/InvalidFieldError'
 import { EqualCharactersValidation } from './EqualCharactersValidation'
-import { InvalidFieldError } from '../../domain/errors/InvalidFieldError'
 
 const makeSut = () => new EqualCharactersValidation()
 

@@ -1,5 +1,5 @@
-import { InvalidFieldError } from '../../domain/errors/InvalidFieldError'
-import { IValidation } from '../../domain/validations/IValidation'
+import { InvalidFieldError } from '@domain/errors/InvalidFieldError'
+import { IValidation } from '@domain/validations/IValidation'
 
 export class MinLengthValidation implements IValidation {
     constructor(private minLength: number) {}
