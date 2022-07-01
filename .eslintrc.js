@@ -34,6 +34,7 @@ module.exports = {
         'class-methods-use-this': 'off',
         'operator-linebreak': 'off',
         'no-multi-assign': 'off',
+        'object-curly-newline': 'off',
     },
     settings: {
         'import/resolver': {
