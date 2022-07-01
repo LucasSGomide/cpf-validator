@@ -3,6 +3,7 @@ import { OrderItem } from './OrderItem'
 import { DiscountCoupon } from './DicountCoupon'
 
 export class Order extends BaseEntity {
+    userId: string
     number: number
     orderItems: OrderItem[]
     discountCoupon: DiscountCoupon
