@@ -1,5 +1,5 @@
-import { InvalidFieldError } from '../errors/InvalidFieldError'
-import { IValidation } from '../protocols/IValidation'
+import { InvalidFieldError } from '../../domain/errors/InvalidFieldError'
+import { IValidation } from '../../domain/validations/IValidation'
 
 export class EqualCharactersValidation implements IValidation {
     private valueArray: string[] = []

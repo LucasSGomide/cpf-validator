@@ -1,4 +1,4 @@
-import { InvalidFieldError } from '../errors/InvalidFieldError'
+import { InvalidFieldError } from '../../domain/errors/InvalidFieldError'
 import { MinLengthValidation } from './MinLengthValidation'
 
 const makeSut = () => new MinLengthValidation(3)

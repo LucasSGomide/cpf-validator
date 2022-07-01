@@ -1,6 +1,6 @@
-import { InvalidFieldError } from '../errors/InvalidFieldError'
-import { ICpfValidation } from '../protocols/ICPfValidation'
-import { IValidation } from '../protocols/IValidation'
+import { InvalidFieldError } from '../../domain/errors/InvalidFieldError'
+import { ICpfValidation } from '../../domain/validations/ICPfValidation'
+import { IValidation } from '../../domain/validations/IValidation'
 
 export class CpfValidation implements ICpfValidation {
     private readonly cpfLength = 11

@@ -1,4 +1,4 @@
-import { InvalidFieldError } from '../errors/InvalidFieldError'
+import { InvalidFieldError } from '../../domain/errors/InvalidFieldError'
 import { CpfValidation } from './CpfValidation'
 import { EqualCharactersValidation } from './EqualCharactersValidation'
 import { MinLengthValidation } from './MinLengthValidation'
