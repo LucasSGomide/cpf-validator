@@ -8,7 +8,10 @@
         "esModuleInterop": true,
         "allowJs": true,
         "paths": {
-            "@domain/*": ["./domain/*"]
+            "@src/*": ["./src/*"],
+            "@infra/*": ["./infra/*"],
+            "@domain/*": ["./domain/*"],
+            "@application/*": ["./application/*"]
         }
     },
     "include": ["src/**/*"],
