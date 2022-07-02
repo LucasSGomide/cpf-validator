@@ -1,3 +1,5 @@
+![JOB-STATUS](https://github.com/LucasSGomide/ecommerce-clean-arch/actions/workflows/github-action.yml/badge.svg)
+
 ## CPF Validation Refactor
 
 -   Refactor challenge from [Branas.io](https://app.branas.io/public/products) **CleanCode and CleanArchitecture** course.
