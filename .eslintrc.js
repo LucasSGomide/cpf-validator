@@ -34,6 +34,9 @@ module.exports = {
         'class-methods-use-this': 'off',
         'operator-linebreak': 'off',
         'no-multi-assign': 'off',
+        'object-curly-newline': 'off',
+        'max-classes-per-file': 'off',
+        'function-paren-newline': 'off',
     },
     settings: {
         'import/resolver': {

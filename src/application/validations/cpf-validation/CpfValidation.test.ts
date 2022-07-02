@@ -1,7 +1,7 @@
-import { InvalidFieldError } from '../errors/InvalidFieldError'
+import { InvalidFieldError } from '@domain/errors/InvalidFieldError'
+import { EqualCharactersValidation } from '../equal-characters-validation/EqualCharactersValidation'
+import { MinLengthValidation } from '../min-length-validation/MinLengthValidation'
 import { CpfValidation } from './CpfValidation'
-import { EqualCharactersValidation } from './EqualCharactersValidation'
-import { MinLengthValidation } from './MinLengthValidation'
 
 const makeSut = () =>
     CpfValidation.build([
