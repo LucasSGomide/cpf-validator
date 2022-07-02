@@ -9,6 +9,7 @@ import {
     makeNewOrderMock,
     makeOrderRepositoryMock,
 } from '@application/order/mocks'
+import { Order } from '@domain/entities/Order'
 import { CreateOrder } from './CreateOrder'
 
 type SutTypes = {
@@ -28,17 +29,38 @@ const makeSut = (): SutTypes => {
     }
 }
 
+type MakeOrderMocksTypes = {
+    newOrderMock: Order
+    createdOrderMock: Order
+}
+
+const makeOrderMocks = (numberOfItems = 1): MakeOrderMocksTypes => {
+    const newOrderMock = makeNewOrderMock({
+        number: 1,
+        price: 1,
+        userId: 'any_user_id',
+        orderItems: new Array(numberOfItems).fill(
+            makeNewOrderItemMock({ quantity: 1 })
+        ),
+    })
+
+    const createdOrderMock = makeCreatedOrderMock({
+        ...newOrderMock,
+        orderItems: newOrderMock.orderItems.map((item) =>
+            makeCreatedOrderItemMock(item)
+        ),
+    })
+
+    return {
+        newOrderMock,
+        createdOrderMock,
+    }
+}
+
 describe('CreateOrder', () => {
     test('Deve criar um novo pedido', async () => {
+        const { newOrderMock, createdOrderMock } = makeOrderMocks()
         const { sut, orderRepository } = makeSut()
-        const newOrderMock = makeNewOrderMock({
-            number: 1,
-            price: 1,
-            userId: 'any_user_id',
-            orderItems: [],
-        })
-        const createdOrderMock = makeCreatedOrderMock(newOrderMock)
-
         const createdOrder = await sut.execute(newOrderMock)
         expect(orderRepository.create).toBeCalledTimes(1)
         expect(orderRepository.create).toBeCalledWith(newOrderMock)
@@ -46,23 +68,10 @@ describe('CreateOrder', () => {
     })
 
     test('Deve criar os itens do pedido', async () => {
-        const newOrderItemMock = makeNewOrderItemMock({ quantity: 1 })
-        const newOrderMock = makeNewOrderMock({
-            number: 1,
-            price: 1,
-            userId: 'any_user_id',
-            orderItems: [newOrderItemMock],
-        })
-        const createdOrderMock = makeCreatedOrderMock({
-            ...newOrderMock,
-            orderItems: [makeCreatedOrderItemMock(newOrderItemMock)],
-        })
-
+        const { newOrderMock, createdOrderMock } = makeOrderMocks()
         const { sut, orderItemRepository } = makeSut()
         const createdOrder = await sut.execute(newOrderMock)
-        expect(orderItemRepository.create).toBeCalledTimes(
-            newOrderMock.orderItems.length
-        )
+        expect(orderItemRepository.create).toBeCalledTimes(1)
         expect(orderItemRepository.create).toBeCalledWith(
             newOrderMock.orderItems[0]
         )
@@ -70,26 +79,9 @@ describe('CreateOrder', () => {
     })
 
     test('Deve criar um pedido com mais de um item', async () => {
-        const newOrderItemMock = makeNewOrderItemMock({ quantity: 1 })
-        const createdOrderItemMock = makeCreatedOrderItemMock(newOrderItemMock)
-        const newOrderMock = makeNewOrderMock({
-            number: 1,
-            price: 1,
-            userId: 'any_user_id',
-            orderItems: [newOrderItemMock, newOrderItemMock, newOrderItemMock],
-        })
-        const createdOrderMock = makeCreatedOrderMock({
-            ...newOrderMock,
-            orderItems: [
-                createdOrderItemMock,
-                createdOrderItemMock,
-                createdOrderItemMock,
-            ],
-        })
-
+        const { newOrderMock, createdOrderMock } = makeOrderMocks(3)
         const { sut, orderItemRepository } = makeSut()
         const createdOrder = await sut.execute(newOrderMock)
-
         expect(orderItemRepository.create).toBeCalledTimes(3)
         expect(createdOrder).toEqual(createdOrderMock)
     })
