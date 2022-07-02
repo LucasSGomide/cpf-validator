@@ -1,3 +1,7 @@
+import {
+    makeCreatedOrderItemMock,
+    makeNewOrderItemMock,
+} from '@application/order-item/mocks'
 import { Order, OrderTypes } from '@domain/entities/Order'
 import { IOrderRepository } from '@domain/repository'
 
@@ -22,6 +26,34 @@ export const makeCreatedOrderMock = (order: Order) =>
         updatedAt: new Date('2022-07-01'),
         deletedAt: null,
     })
+
+type MakeOrderMocksTypes = {
+    newOrderMock: Order
+    createdOrderMock: Order
+}
+
+export const makeOrderMocks = (numberOfItems = 1): MakeOrderMocksTypes => {
+    const newOrderMock = makeNewOrderMock({
+        number: 1,
+        price: 1,
+        userId: 'any_user_id',
+        orderItems: new Array(numberOfItems).fill(
+            makeNewOrderItemMock({ quantity: 1 })
+        ),
+    })
+
+    const createdOrderMock = makeCreatedOrderMock({
+        ...newOrderMock,
+        orderItems: newOrderMock.orderItems.map((item) =>
+            makeCreatedOrderItemMock(item)
+        ),
+    })
+
+    return {
+        newOrderMock,
+        createdOrderMock,
+    }
+}
 
 export const makeOrderRepositoryMock = (): IOrderRepository => {
     const createMock = jest.fn((order: Order) =>

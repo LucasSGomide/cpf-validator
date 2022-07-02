@@ -1,15 +1,9 @@
 import { IOrderRepository, IOrderItemRepository } from '@domain/repository'
+import { makeOrderItemRepositoryMock } from '@application/order-item/mocks'
 import {
-    makeCreatedOrderItemMock,
-    makeNewOrderItemMock,
-    makeOrderItemRepositoryMock,
-} from '@application/order-item/mocks'
-import {
-    makeCreatedOrderMock,
-    makeNewOrderMock,
+    makeOrderMocks,
     makeOrderRepositoryMock,
 } from '@application/order/mocks'
-import { Order } from '@domain/entities/Order'
 import { CreateOrder } from './CreateOrder'
 
 type SutTypes = {
@@ -21,39 +15,10 @@ type SutTypes = {
 const makeSut = (): SutTypes => {
     const orderRepository = makeOrderRepositoryMock()
     const orderItemRepository = makeOrderItemRepositoryMock()
-
     return {
         orderRepository,
         orderItemRepository,
         sut: new CreateOrder(orderRepository, orderItemRepository),
-    }
-}
-
-type MakeOrderMocksTypes = {
-    newOrderMock: Order
-    createdOrderMock: Order
-}
-
-const makeOrderMocks = (numberOfItems = 1): MakeOrderMocksTypes => {
-    const newOrderMock = makeNewOrderMock({
-        number: 1,
-        price: 1,
-        userId: 'any_user_id',
-        orderItems: new Array(numberOfItems).fill(
-            makeNewOrderItemMock({ quantity: 1 })
-        ),
-    })
-
-    const createdOrderMock = makeCreatedOrderMock({
-        ...newOrderMock,
-        orderItems: newOrderMock.orderItems.map((item) =>
-            makeCreatedOrderItemMock(item)
-        ),
-    })
-
-    return {
-        newOrderMock,
-        createdOrderMock,
     }
 }
 
