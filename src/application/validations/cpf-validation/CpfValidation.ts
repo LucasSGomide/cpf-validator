@@ -18,6 +18,7 @@ export class CpfValidation implements ICpfValidation {
         this.validators.forEach((validator) => validator.execute(this.cpf))
         const { firstSegment, digitsToValidate } = this.segragateCpf()
         const { validDigits } = this.calculatesValidDigits(firstSegment)
+        // TODO - Melhorar mensagem de erro
         if (validDigits !== digitsToValidate) throw new InvalidFieldError()
         return null
     }
