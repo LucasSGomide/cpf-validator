@@ -1,16 +1,19 @@
+import { makeCpfValidation } from '@application/validations/cpf-validation/config'
 import { User } from '@domain/entities'
+import { InvalidFieldError } from '@domain/errors/InvalidFieldError'
 import { CreateUser } from './CreateUser'
 import { makeUserRepositoryMock } from './mocks'
 
 describe('CreateUser', () => {
-    test('Deve criar um novo usuário se o mesmo possuir dados válidos', async () => {
+    test('Deve criar um novo usuário se o mesmo possuir CPF válido', async () => {
+        const cpfValidation = makeCpfValidation()
         const userRepository = makeUserRepositoryMock()
         const userToCreate = new User({
             name: 'any_valid_name',
             lastName: 'any_valid_lastname',
             cpf: '473.491.640-33',
         })
-        const sut = new CreateUser(userRepository)
+        const sut = new CreateUser(userRepository, cpfValidation)
 
         const createdUser = await sut.execute(userToCreate)
 
@@ -25,5 +28,21 @@ describe('CreateUser', () => {
                 deletedAt: null,
             })
         )
+    })
+
+    test('Deve lançar erro se o usuário possuir CPF inválido', async () => {
+        const cpfValidation = makeCpfValidation()
+        const userRepository = makeUserRepositoryMock()
+        const userToCreate = new User({
+            name: 'any_valid_name',
+            lastName: 'any_valid_lastname',
+            cpf: '473.491.640-32',
+        })
+        const sut = new CreateUser(userRepository, cpfValidation)
+
+        const promise = sut.execute(userToCreate)
+
+        expect(promise).rejects.toEqual(new InvalidFieldError())
+        expect(userRepository.create).not.toBeCalled()
     })
 })
