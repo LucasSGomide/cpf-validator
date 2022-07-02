@@ -14,8 +14,8 @@ export class CreateOrder implements IUseCase {
     ) {}
 
     async execute(order: Order): Promise<Order> {
-        await this.userRepository.findById({ id: order.userId })
-
+        const user = await this.userRepository.findById({ id: order.userId })
+        if (!user) throw new Error('Usuário não encontrado.')
         const createdOrder = await this.orderRepository.create(order)
         const createdOrderItems = await Promise.all(
             order.orderItems.map(async (orderItem) => {
