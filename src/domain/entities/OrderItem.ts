@@ -21,3 +21,13 @@ export class OrderItem extends BaseEntity {
         this.product = new Product(product)
     }
 }
+
+export type OrderItemTypes = {
+    id?: string
+    createdAt?: Date
+    deletedAt?: Date
+    updatedAt?: Date
+    orderId?: string
+    quantity: number
+    product: Product
+}
