@@ -57,4 +57,15 @@ describe('CreateUser', () => {
         expect(promise).rejects.toEqual(new InvalidFieldError())
         expect(userRepository.create).not.toBeCalled()
     })
+
+    test('Deve lançar erro se ocorrer um erro inesperado em UserRepository', async () => {
+        const { sut, userToCreate, userRepository } = makeSut({})
+        jest.spyOn(userRepository, 'create').mockRejectedValueOnce(
+            new Error('Unexpected Error')
+        )
+        const promise = sut.execute(userToCreate)
+        expect(promise).rejects.toEqual(new Error('Unexpected Error'))
+        expect(userRepository.create).toBeCalledTimes(1)
+        expect(userRepository.create).toBeCalledWith(userToCreate)
+    })
 })
