@@ -1,4 +1,5 @@
 ![JOB-STATUS](https://github.com/LucasSGomide/ecommerce-clean-arch/actions/workflows/github-action.yml/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/LucasSGomide/ecommerce-clean-arch/badge.svg?branch=main)](https://coveralls.io/github/LucasSGomide/ecommerce-clean-arch?branch=main)
 
 ## CPF Validation Refactor
 
