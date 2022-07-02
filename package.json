@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "postinstall": "npm run prepare",
         "test": "jest --noStackTrace --silent --runInBand --passWithNoTests --coverage",
+        "test:ci": "jest --noStackTrace --silent --runInBand --passWithNoTests --bail",
         "test:watch": "jest --watch",
         "prepare": "husky install"
     },
