@@ -2,9 +2,8 @@ import { BaseEntity } from './BaseEntity'
 import { Product } from './Product'
 
 export class OrderItem extends BaseEntity {
-    orderId: string
+    orderId?: string
     quantity: number
-    price: number
     product: Product
 
     constructor({
@@ -14,13 +13,11 @@ export class OrderItem extends BaseEntity {
         updatedAt,
         orderId,
         quantity,
-        price,
         product,
     }: OrderItem) {
         super({ id, createdAt, deletedAt, updatedAt })
         this.orderId = orderId
         this.quantity = quantity
-        this.price = price
         this.product = new Product(product)
     }
 }
