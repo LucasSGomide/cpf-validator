@@ -52,6 +52,23 @@ describe('CreateOrder', () => {
         expect(createdOrder).toEqual(createdOrderMock)
     })
 
+    test('Deve lançar erro se o usuário não for cadastrado', async () => {
+        const { newOrderMock } = makeOrderMocks()
+        const { sut, orderRepository, orderItemRepository, userRepository } =
+            makeSut()
+        jest.spyOn(userRepository, 'findById').mockResolvedValueOnce(null)
+        const promise = sut.execute(newOrderMock)
+        await expect(promise).rejects.toEqual(
+            new Error('Usuário não encontrado.')
+        )
+        expect(userRepository.findById).toBeCalledTimes(1)
+        expect(userRepository.findById).toBeCalledWith({
+            id: newOrderMock.userId,
+        })
+        expect(orderItemRepository.create).not.toBeCalled()
+        expect(orderRepository.create).not.toBeCalled()
+    })
+
     test('Deve criar os itens do pedido', async () => {
         const { newOrderMock, createdOrderMock } = makeOrderMocks()
         const { sut, orderItemRepository } = makeSut()
