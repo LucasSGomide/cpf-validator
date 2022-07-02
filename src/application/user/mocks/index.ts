@@ -11,6 +11,16 @@ export const makeUserRepositoryMock = (): IUserRepository => {
     const findByIdMock = jest.fn((param: { id: string }) =>
         Promise.resolve({
             ...userMock,
+            id: param.id,
+            createdAt: new Date('2022-07-01'),
+            updatedAt: new Date('2022-07-01'),
+            deletedAt: null,
+        })
+    )
+
+    const createUserMock = jest.fn((user: User) =>
+        Promise.resolve({
+            ...user,
             id: 'any_user_id',
             createdAt: new Date('2022-07-01'),
             updatedAt: new Date('2022-07-01'),
@@ -19,7 +29,7 @@ export const makeUserRepositoryMock = (): IUserRepository => {
     )
 
     return {
-        create: jest.fn(),
+        create: createUserMock,
         findById: findByIdMock,
     }
 }
