@@ -68,5 +68,6 @@ export const makeOrderRepositoryMock = (): IOrderRepository => {
 
     return {
         create: createMock,
+        findById: jest.fn(),
     }
 }
