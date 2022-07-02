@@ -39,3 +39,18 @@ export class Order extends BaseEntity {
             : null
     }
 }
+
+export type OrderTypes = {
+    id?: string
+    createdAt?: Date
+    deletedAt?: Date
+    updatedAt?: Date
+    userId: string
+    number: number
+    price: number
+    freightPrice?: number
+    taxPrice?: number
+    subtotal?: number
+    orderItems: OrderItem[]
+    discountCoupon?: DiscountCoupon
+}
