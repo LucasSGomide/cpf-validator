@@ -10,13 +10,14 @@ export class Order extends BaseEntity {
     subtotal?: number
     userId: string
     orderItems: OrderItem[]
-    discountCoupon: DiscountCoupon
+    discountCoupon?: DiscountCoupon
 
     constructor({
         id,
         createdAt,
         deletedAt,
         updatedAt,
+        userId,
         number,
         price,
         freightPrice,
@@ -26,12 +27,15 @@ export class Order extends BaseEntity {
         discountCoupon,
     }: Order) {
         super({ id, createdAt, deletedAt, updatedAt })
+        this.userId = userId
         this.number = number
         this.price = price
         this.freightPrice = freightPrice
         this.taxPrice = taxPrice
         this.subtotal = subtotal
         this.orderItems = orderItems.map((item) => new OrderItem(item))
-        this.discountCoupon = new DiscountCoupon(discountCoupon)
+        this.discountCoupon = discountCoupon
+            ? new DiscountCoupon(discountCoupon)
+            : null
     }
 }
