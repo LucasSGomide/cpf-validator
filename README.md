@@ -1,13 +1,56 @@
 ![JOB-STATUS](https://github.com/LucasSGomide/ecommerce-clean-arch/actions/workflows/github-action.yml/badge.svg)
 
-## CPF Validation Refactor
+## Welcome to the Clean Architecture E-Commerce Project
 
--   Refactor challenge from [Branas.io](https://app.branas.io/public/products) **CleanCode and CleanArchitecture** course.
+This repository is my personal implementation of the E-Commerce Project studied at [Clean Code & Clean Architecture Course](https://app.branas.io/public/products). 
+### Objective
+The main goal here is to create a simple e-commerce implementation using **_SOLID_** principles,**_Object Oriented Programming_**, **_Refactoring Techniques_**", **_Clean Architecture_**, **_Domain Driven Design_**, **_Test Driven Development_** and some **_Design Patterns_**.
+
+---
+
+## Applied Practices
+
+### Good Practices
+- **Conventional Commits Pattern**  
+    - Enforced with: [Git Commit Message Linter](https://www.npmjs.com/package/git-commit-msg-linter)
+- **No test breaking commits**
+    - Helped by: [Lint Staged](lint-staged)
+    - Enforced by: [Husky](https://www.npmjs.com/package/husky)
+
+### Code Quality
+- **Eslint**
+    - Airbnb Typescript
+    - Personal Rules
+- **Prettier**
+    - Default
+
+### Tests
+- **Jest**
+    - Mapped Paths
+    - Ts-Jest
+- **Test Patterns**
+    - Mocks
+    - Spies
+    - System Under Test (SUT)
+
+### CI/CD
+- **GitHub Actions**
+    - Jobs:
+        - Test
+        - Eslint
+        - Coveralls
+
+---
+
+## Challenges
+### CPF Validation Refactor
+
+-   Refactor challenge:
     -   [CPF Algorithm](https://www.macoratti.net/alg_cpf.htm)
 
 ### Function to Refactor:
 
--   Obs: The results are into the repository SRC folder
+-   Obs: The results are accessible in the _refactor/cpf-challenge_ branch into the SRC folder
     -   "FirstRefactor.ts" is the first result using functions
     -   "CpfValidation.ts" is the last result using Typescript with Classes and Interfaces
 
