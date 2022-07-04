@@ -2,7 +2,7 @@ import { cpfValidation } from '../FirstRefactor'
 
 describe('CPF', () => {
     test('Deve retornar true para um cpf válido', () => {
-        const cpf = '061.813.806-47'
+        const cpf = '473.491.640-33'
 
         const result = cpfValidation(cpf)
 
@@ -10,7 +10,7 @@ describe('CPF', () => {
     })
 
     test('Deve retornar true para um cpf válido que não tem caracteres especiais', () => {
-        const cpf = '06181380647'
+        const cpf = '47349164033'
 
         const result = cpfValidation(cpf)
 
@@ -18,7 +18,7 @@ describe('CPF', () => {
     })
 
     test('Deve retornar false para um cpf inválido em que o penúltimo digito deveria ser 0', () => {
-        const cpf = '061.813.100-48'
+        const cpf = '473.491.640-37'
 
         const result = cpfValidation(cpf)
 
