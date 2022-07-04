@@ -23,7 +23,7 @@ describe('CpfValidation', () => {
     test('Deve retornar null se o cpf for válido', () => {
         const sut = makeSut()
 
-        const result = sut.execute('061.813.806-47')
+        const result = sut.execute('473.491.640-33')
 
         expect(result).toBeFalsy()
     })
@@ -37,7 +37,7 @@ describe('CpfValidation', () => {
 
     test('Deve retornar false para um cpf inválido em que o primeiro digito deveria ser 0', () => {
         const sut = makeSut()
-        const cpf = '061.813.100-48'
+        const cpf = '473.491.640-31'
 
         testInvalidCpf(sut, cpf)
     })
