@@ -29,13 +29,15 @@ export const makeCreatedOrderItemMock = (orderItem: OrderItem) => {
 
 export const makeOrderItemRepositoryMock = (): IOrderItemRepository => {
     const createMock = jest.fn((orderItem: OrderItem) =>
-        Promise.resolve({
-            ...orderItem,
-            id: 'any_order_item_id',
-            createdAt: new Date('2022-07-01'),
-            updatedAt: new Date('2022-07-01'),
-            deletedAt: null,
-        })
+        Promise.resolve(
+            new OrderItem({
+                ...orderItem,
+                id: 'any_order_item_id',
+                createdAt: new Date('2022-07-01'),
+                updatedAt: new Date('2022-07-01'),
+                deletedAt: null,
+            })
+        )
     )
 
     return {
