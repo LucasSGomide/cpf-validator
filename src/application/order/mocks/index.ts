@@ -42,12 +42,14 @@ export const makeOrderMocks = (numberOfItems = 1): MakeOrderMocksTypes => {
         ),
     })
 
-    const createdOrderMock = makeCreatedOrderMock({
-        ...newOrderMock,
-        orderItems: newOrderMock.orderItems.map((item) =>
-            makeCreatedOrderItemMock(item)
-        ),
-    })
+    const createdOrderMock = makeCreatedOrderMock(
+        new Order({
+            ...newOrderMock,
+            orderItems: newOrderMock.orderItems.map((item) =>
+                makeCreatedOrderItemMock(item)
+            ),
+        })
+    )
 
     return {
         newOrderMock,
@@ -57,13 +59,15 @@ export const makeOrderMocks = (numberOfItems = 1): MakeOrderMocksTypes => {
 
 export const makeOrderRepositoryMock = (): IOrderRepository => {
     const createMock = jest.fn((order: Order) =>
-        Promise.resolve({
-            ...order,
-            id: 'any_order_id',
-            createdAt: new Date('2022-07-01'),
-            updatedAt: new Date('2022-07-01'),
-            deletedAt: null,
-        })
+        Promise.resolve(
+            new Order({
+                ...order,
+                id: 'any_order_id',
+                createdAt: new Date('2022-07-01'),
+                updatedAt: new Date('2022-07-01'),
+                deletedAt: null,
+            })
+        )
     )
 
     return {
