@@ -1,83 +1,55 @@
-import { ICpfValidation } from '@domain/validations/ICPfValidation'
 import { InvalidFieldError } from '@domain/errors/InvalidFieldError'
+import { ICpfValidation } from '@domain/validations/ICPfValidation'
 import { IValidation } from '@domain/validations/IValidation'
 
 export class CpfValidation implements ICpfValidation {
-    private readonly cpfLength = 11
-    private readonly numberOfDigits = 2
-    public cpf: string = ''
+    readonly firstFactor = 10
+    readonly secondFactor = 11
+    private value: string
 
-    constructor(public validators: IValidation[]) {}
+    constructor(private validators: IValidation[]) {}
 
     static build(validators: IValidation[]) {
         return new CpfValidation(validators)
     }
 
+    getValue() {
+        return this.value
+    }
+
     execute(cpf: string): Error {
-        this.cpf = this.sanitizeCpf(cpf)
-        this.validators.forEach((validator) => validator.execute(this.cpf))
-        const { firstSegment, digitsToValidate } = this.segragateCpf()
-        const { validDigits } = this.calculatesValidDigits(firstSegment)
-        // TODO - Melhorar mensagem de erro
+        const value = this.sanitizeCpf(cpf)
+        this.value = value
+        this.validators.forEach((validator) => validator.execute(value))
+        const digitsToValidate = this.getDigitsToValidate(value)
+        const firstDigit = this.calculatesValidDigit(value, this.firstFactor)
+        const secondDigit = this.calculatesValidDigit(value, this.secondFactor)
+        const validDigits = `${firstDigit}${secondDigit}`
         if (validDigits !== digitsToValidate) throw new InvalidFieldError()
         return null
     }
 
     private sanitizeCpf(value: string): string {
-        return value
-            .replace('.', '')
-            .replace('.', '')
-            .replace('-', '')
-            .replace(' ', '')
+        return value.replace(/\D+/g, '')
     }
 
-    private segragateCpf(): {
-        firstSegment: string[]
-        digitsToValidate: string
-    } {
-        const firstIndex = 0
-        const digitsIndex = this.cpfLength - this.numberOfDigits
-        const firstSegment = this.cpf
-            .substring(firstIndex, digitsIndex)
-            .split('')
-        const digitsToValidate = this.cpf.substring(digitsIndex, this.cpfLength)
-        return { firstSegment, digitsToValidate }
+    private getDigitsToValidate(cpf: string): string {
+        const lastTwoCharacters = -2
+        return cpf.slice(lastTwoCharacters)
     }
 
-    private calculatesValidDigits(firstSegment: string[]): {
-        validDigits: string
-    } {
-        const { firstTotal, secondTotal } = firstSegment.reduce(
-            (acc, digit, index) => {
-                const firstMultiplier = this.cpfLength - 1 - index
-                const secondMultiplier = this.cpfLength - index
-                acc.firstTotal = acc.firstTotal +=
-                    firstMultiplier * parseInt(digit, 10)
-                acc.secondTotal = acc.secondTotal +=
-                    secondMultiplier * parseInt(digit, 10)
-                return acc
-            },
-            { firstTotal: 0, secondTotal: 0 }
-        )
-        const firstDigit = this.calculatesFirsDigit(firstTotal)
-        const secondDigit = this.calculatesSecondDigit(firstDigit, secondTotal)
-        return { validDigits: `${firstDigit}${secondDigit}` }
-    }
+    private calculatesValidDigit(cpf: string, factor: number): number {
+        let total = 0
+        let multiplier = factor
+        const characters = Array.from(cpf)
+        characters.forEach((character) => {
+            if (multiplier > 1) {
+                total += parseInt(character, 10) * multiplier
+                multiplier -= 1
+            }
+        })
 
-    private calculatesFirsDigit(firstTotal: number): number {
-        const remainder = firstTotal % this.cpfLength
-        return this.getValidDigit(remainder)
-    }
-
-    private calculatesSecondDigit(
-        firstDigit: number,
-        secondTotal: number
-    ): number {
-        const remainder = (secondTotal + firstDigit * 2) % this.cpfLength
-        return this.getValidDigit(remainder)
-    }
-
-    private getValidDigit(remainder: number): number {
-        return remainder < 2 ? 0 : this.cpfLength - remainder
+        const rest = total % 11
+        return rest < 2 ? 0 : 11 - rest
     }
 }

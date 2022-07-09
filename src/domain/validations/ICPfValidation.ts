@@ -1,7 +1,4 @@
-import { IValidation } from './IValidation'
-
 export interface ICpfValidation {
-    validators: IValidation[]
-    cpf: string
+    getValue: () => string
     execute: (cpf: string) => Error
 }
