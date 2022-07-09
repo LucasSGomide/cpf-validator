@@ -44,7 +44,7 @@ describe('CpfValidation', () => {
 
     test('Deve retornar InvalidFieldError se o cpf for inválido', () => {
         const sut = makeSut()
-        const cpf = '061.813.806-45'
+        const cpf = '127.937.070-06'
         testInvalidCpf(sut, cpf)
     })
 
