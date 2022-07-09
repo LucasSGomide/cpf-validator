@@ -33,10 +33,10 @@ export class Order extends BaseEntity {
         this.taxPrice = taxPrice
         this.subtotal = subtotal
         this.orderItems = orderItems.map((item) => new OrderItem(item))
-        this.price = price || this.calculatesPrice()
         this.discountCoupon = discountCoupon
             ? new DiscountCoupon(discountCoupon)
             : null
+        this.price = price || this.calculatesPrice()
     }
 
     public getPrice() {
@@ -48,6 +48,10 @@ export class Order extends BaseEntity {
         this.orderItems.forEach((item) => {
             total += item.getPrice()
         })
+        if (this.discountCoupon) {
+            const { discountPercentage } = this.discountCoupon
+            return (total * (100 - discountPercentage)) / 100
+        }
         return total
     }
 }
