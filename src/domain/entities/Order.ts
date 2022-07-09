@@ -3,8 +3,8 @@ import { OrderItem } from './OrderItem'
 import { DiscountCoupon } from './DicountCoupon'
 
 export class Order extends BaseEntity {
-    number: number
-    price: number
+    number?: number
+    price?: number
     freightPrice?: number
     taxPrice?: number
     subtotal?: number
@@ -25,11 +25,10 @@ export class Order extends BaseEntity {
         subtotal,
         orderItems,
         discountCoupon,
-    }: Order) {
+    }: OrderTypes) {
         super({ id, createdAt, deletedAt, updatedAt })
         this.userId = userId
         this.number = number
-        this.price = price
         this.freightPrice = freightPrice
         this.taxPrice = taxPrice
         this.subtotal = subtotal
@@ -37,6 +36,23 @@ export class Order extends BaseEntity {
         this.discountCoupon = discountCoupon
             ? new DiscountCoupon(discountCoupon)
             : null
+        this.price = price || this.calculatesPrice()
+    }
+
+    public getPrice() {
+        return this.price
+    }
+
+    private calculatesPrice(): number {
+        let total: number = 0
+        this.orderItems.forEach((item) => {
+            total += item.getPrice()
+        })
+        if (this.discountCoupon) {
+            const { discountPercentage } = this.discountCoupon
+            return (total * (100 - discountPercentage)) / 100
+        }
+        return total
     }
 }
 
@@ -46,8 +62,8 @@ export type OrderTypes = {
     deletedAt?: Date
     updatedAt?: Date
     userId: string
-    number: number
-    price: number
+    number?: number
+    price?: number
     freightPrice?: number
     taxPrice?: number
     subtotal?: number
