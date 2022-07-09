@@ -19,13 +19,13 @@ export class CpfValidation implements ICpfValidation {
 
     execute(cpf: string): Error {
         const value = this.sanitizeCpf(cpf)
-        this.value = value
         this.validators.forEach((validator) => validator.execute(value))
         const digitsToValidate = this.getDigitsToValidate(value)
         const firstDigit = this.calculatesValidDigit(value, this.firstFactor)
         const secondDigit = this.calculatesValidDigit(value, this.secondFactor)
         const validDigits = `${firstDigit}${secondDigit}`
         if (validDigits !== digitsToValidate) throw new InvalidFieldError()
+        this.value = value
         return null
     }
 
