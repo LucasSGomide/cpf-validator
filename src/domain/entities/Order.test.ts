@@ -23,10 +23,9 @@ describe('Order', () => {
             quantity: 30,
             product: secondProduct,
         })
-        const order = new Order({
-            orderItems: [firstItem, secondItem],
-            userId: 'any_user_id',
-        })
+        const order = new Order({})
+        order.addItem(firstItem)
+        order.addItem(secondItem)
         const price = order.getPrice()
         expect(price).toBe(1450)
     })
@@ -54,11 +53,10 @@ describe('Order', () => {
             name: 'any',
             discountPercentage: 10,
         })
-        const order = new Order({
-            orderItems: [firstItem, secondItem],
-            userId: 'any_user_id',
-            discountCoupon,
-        })
+        const order = new Order({})
+        order.addItem(firstItem)
+        order.addItem(secondItem)
+        order.addCoupon(discountCoupon)
         const price = order.getPrice()
         expect(price).toBe(1305)
     })
