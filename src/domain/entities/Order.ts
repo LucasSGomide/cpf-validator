@@ -37,8 +37,7 @@ export class Order extends BaseEntity {
             total += item.getPrice()
         })
         if (this.discountCoupon) {
-            const { discountPercentage } = this.discountCoupon
-            return (total * (100 - discountPercentage)) / 100
+            return total - this.discountCoupon.getDiscount(total)
         }
         return total
     }
