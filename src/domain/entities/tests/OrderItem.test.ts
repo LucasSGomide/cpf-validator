@@ -1,5 +1,5 @@
-import { OrderItem } from './OrderItem'
-import { Product } from './Product'
+import { OrderItem } from '../OrderItem'
+import { Product } from '../Product'
 
 describe('OrderItem', () => {
     it('Deve calcular corretamente o valor de um produto', () => {

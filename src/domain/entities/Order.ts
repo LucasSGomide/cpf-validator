@@ -1,6 +1,6 @@
 import { BaseEntity } from './BaseEntity'
 import { OrderItem } from './OrderItem'
-import { DiscountCoupon } from './DicountCoupon'
+import { DiscountCoupon } from './DiscountCoupon'
 
 export class Order extends BaseEntity {
     price?: number

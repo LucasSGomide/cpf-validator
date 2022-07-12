@@ -1,4 +1,4 @@
-import { DiscountCoupon } from './DicountCoupon'
+import { DiscountCoupon } from '../DiscountCoupon'
 
 describe('DiscountCoupon', () => {
     it('Deve instanciar um novo cupom de desconto', () => {

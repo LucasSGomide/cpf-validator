@@ -1,7 +1,7 @@
-import { DiscountCoupon } from './DicountCoupon'
-import { Order } from './Order'
-import { OrderItem } from './OrderItem'
-import { Product } from './Product'
+import { DiscountCoupon } from '../DiscountCoupon'
+import { Order } from '../Order'
+import { OrderItem } from '../OrderItem'
+import { Product } from '../Product'
 
 describe('Order', () => {
     it('Deve calcular corretamente o valor total de um pedido sem cupom de desconto', () => {
