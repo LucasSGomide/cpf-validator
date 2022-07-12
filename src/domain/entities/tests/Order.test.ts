@@ -1,9 +1,22 @@
+import { InvalidCpfError } from '@domain/errors/InvalidCpfError'
 import { DiscountCoupon } from '../DiscountCoupon'
 import { Order } from '../Order'
 import { OrderItem } from '../OrderItem'
 import { Product } from '../Product'
 
+type SutTypes = {
+    value?: string
+}
+
+const makeSut = ({ value }: SutTypes) =>
+    new Order({ cpf: value || '473.491.640-33' })
+
 describe('Order', () => {
+    it('Não deve criar um pedido com CPF inválido', () => {
+        const cpf = '111.111.111-11'
+        expect(() => new Order({ cpf })).toThrow(new InvalidCpfError())
+    })
+
     it('Deve calcular corretamente o valor total de um pedido sem cupom de desconto', () => {
         const firstProduct = new Product({
             name: 'any_first_product',
@@ -23,7 +36,7 @@ describe('Order', () => {
             quantity: 30,
             product: secondProduct,
         })
-        const order = new Order({})
+        const order = makeSut({})
         order.addItem(firstItem)
         order.addItem(secondItem)
         const price = order.getPrice()
@@ -53,7 +66,7 @@ describe('Order', () => {
             name: 'any',
             discountPercentage: 10,
         })
-        const order = new Order({})
+        const order = makeSut({})
         order.addItem(firstItem)
         order.addItem(secondItem)
         order.addCoupon(discountCoupon)
