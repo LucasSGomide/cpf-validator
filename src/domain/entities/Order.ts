@@ -1,16 +1,19 @@
 import { BaseEntity } from './BaseEntity'
 import { OrderItem } from './OrderItem'
 import { DiscountCoupon } from './DiscountCoupon'
+import { Cpf } from './Cpf'
 
 export class Order extends BaseEntity {
     price?: number
+    cpf: Cpf
     freightPrice?: number
     orderItems: OrderItem[]
     discountCoupon?: DiscountCoupon
 
-    constructor({ id, createdAt, deletedAt, updatedAt }: OrderTypes) {
+    constructor({ id, createdAt, deletedAt, updatedAt, cpf }: OrderTypes) {
         super({ id, createdAt, deletedAt, updatedAt })
         this.orderItems = []
+        this.cpf = new Cpf({ value: cpf })
     }
 
     public addItem(item: OrderItem) {
@@ -46,4 +49,5 @@ export type OrderTypes = {
     createdAt?: Date
     deletedAt?: Date
     updatedAt?: Date
+    cpf: string
 }
