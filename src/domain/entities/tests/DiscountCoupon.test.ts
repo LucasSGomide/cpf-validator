@@ -1,11 +1,12 @@
 import { DiscountCoupon } from '../DiscountCoupon'
 
 describe('DiscountCoupon', () => {
-    it('Deve instanciar um novo cupom de desconto', () => {
+    it('Deve calcular corretamente o valor do desconto', () => {
         const sut = new DiscountCoupon({
             discountPercentage: 10,
             name: 'any_name',
         })
-        expect(sut).toBeDefined()
+        const discount = sut.getDiscount(1000)
+        expect(discount).toBe(100)
     })
 })
