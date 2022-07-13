@@ -43,7 +43,7 @@ describe('Order', () => {
         expect(price).toBe(1450)
     })
 
-    it('Deve calcular corretamente o valor total de um pedido com cupom de desconto', () => {
+    it('Deve calcular corretamente o valor total de um pedido com cupom de desconto expirado', () => {
         const firstProduct = new Product({
             name: 'any_first_product',
             price: 10,
@@ -64,13 +64,14 @@ describe('Order', () => {
         })
         const discountCoupon = new DiscountCoupon({
             name: 'any',
-            discountPercentage: 10,
+            percentage: 10,
+            expireDate: new Date('2022-05-01T10:00:00Z'),
         })
         const order = makeSut({})
         order.addItem(firstItem)
         order.addItem(secondItem)
         order.addCoupon(discountCoupon)
         const price = order.getPrice()
-        expect(price).toBe(1305)
+        expect(price).toBe(1450)
     })
 })
