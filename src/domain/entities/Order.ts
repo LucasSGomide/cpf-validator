@@ -19,6 +19,9 @@ export class Order {
 
     public addItem(item: OrderItem) {
         if (item.quantity < 0) throw new InvalidAttributeError('quantity')
+        if (this.isDuplicatedItem(item)) {
+            throw new InvalidAttributeError('orderItem')
+        }
         this.orderItems.push(
             new OrderItem({ quantity: item.quantity, product: item.product })
         )
@@ -45,6 +48,12 @@ export class Order {
             return total - this.discountCoupon.getDiscount(total)
         }
         return total
+    }
+
+    private isDuplicatedItem(item: OrderItem): boolean {
+        return this.orderItems.some(
+            (orderItem) => orderItem.product.id === item.product.id
+        )
     }
 }
 
