@@ -1,3 +1,4 @@
+import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 import { InvalidCpfError } from '@domain/errors/InvalidCpfError'
 import { DiscountCoupon } from '../DiscountCoupon'
 import { Order } from '../Order'
@@ -83,5 +84,14 @@ describe('Order', () => {
         order.addCoupon(discountCoupon)
         const price = order.getPrice()
         expect(price).toBe(1305)
+    })
+
+    it('Deve lançar InvalidAttributeError se um item do pedido possuir quantidade negativa', () => {
+        const { firstItem } = makeBaseOrder()
+        firstItem.quantity = -5
+        const order = makeSut({})
+        expect(() => order.addItem(firstItem)).toThrow(
+            new InvalidAttributeError('quantity')
+        )
     })
 })
