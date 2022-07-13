@@ -1,23 +1,11 @@
-import { BaseEntity } from './BaseEntity'
 import { Product } from './Product'
 
-export class OrderItem extends BaseEntity {
+export class OrderItem {
     private price: number
-    orderId?: string
     quantity: number
     product: Product
 
-    constructor({
-        id,
-        createdAt,
-        deletedAt,
-        updatedAt,
-        orderId,
-        quantity,
-        product,
-    }: OrderItemTypes) {
-        super({ id, createdAt, deletedAt, updatedAt })
-        this.orderId = orderId
+    constructor({ quantity, product }: OrderItemTypes) {
         this.quantity = quantity
         this.product = new Product(product)
         this.price = this.calculatesPrice()
@@ -33,11 +21,6 @@ export class OrderItem extends BaseEntity {
 }
 
 export type OrderItemTypes = {
-    id?: string
-    createdAt?: Date
-    deletedAt?: Date
-    updatedAt?: Date
-    orderId?: string
     quantity: number
     product: Product
 }
