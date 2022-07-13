@@ -1,20 +1,12 @@
-import { BaseEntity } from './BaseEntity'
-
-export class DiscountCoupon extends BaseEntity {
-    discountPercentage: number
+export class DiscountCoupon {
+    percentage: number
     name: string
+    expireDate?: Date
 
-    constructor({
-        id,
-        createdAt,
-        deletedAt,
-        updatedAt,
-        discountPercentage,
-        name,
-    }: DiscountCouponTypes) {
-        super({ id, createdAt, deletedAt, updatedAt })
-        this.discountPercentage = discountPercentage
+    constructor({ percentage, expireDate, name }: DiscountCouponTypes) {
+        this.percentage = percentage
         this.name = name
+        this.expireDate = expireDate
     }
 
     public getDiscount(total: number) {
@@ -22,16 +14,17 @@ export class DiscountCoupon extends BaseEntity {
         return discount
     }
 
+    isExpired(date: Date): boolean {
+        return this.expireDate.getTime() < date.getTime()
+    }
+
     private calculatesDiscount(total: number) {
-        return total * (this.discountPercentage / 100)
+        return total * (this.percentage / 100)
     }
 }
 
 type DiscountCouponTypes = {
-    id?: string
-    createdAt?: Date
-    deletedAt?: Date
-    updatedAt?: Date
-    discountPercentage: number
+    expireDate?: Date
+    percentage: number
     name: string
 }
