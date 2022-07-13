@@ -1,19 +1,19 @@
-import { BaseEntity } from './BaseEntity'
 import { OrderItem } from './OrderItem'
 import { DiscountCoupon } from './DiscountCoupon'
 import { Cpf } from './Cpf'
 
-export class Order extends BaseEntity {
-    price?: number
+export class Order {
     cpf: Cpf
+    requestDate?: Date
+    price?: number
     freightPrice?: number
     orderItems: OrderItem[]
     discountCoupon?: DiscountCoupon
 
-    constructor({ id, createdAt, deletedAt, updatedAt, cpf }: OrderTypes) {
-        super({ id, createdAt, deletedAt, updatedAt })
+    constructor({ cpf, requestDate }: OrderTypes) {
         this.orderItems = []
         this.cpf = new Cpf({ value: cpf })
+        this.requestDate = requestDate || new Date()
     }
 
     public addItem(item: OrderItem) {
@@ -37,6 +37,9 @@ export class Order extends BaseEntity {
             total += item.getPrice()
         })
         if (this.discountCoupon) {
+            if (this.discountCoupon.isExpired(this.requestDate)) {
+                return total
+            }
             return total - this.discountCoupon.getDiscount(total)
         }
         return total
@@ -44,9 +47,6 @@ export class Order extends BaseEntity {
 }
 
 export type OrderTypes = {
-    id?: string
-    createdAt?: Date
-    deletedAt?: Date
-    updatedAt?: Date
     cpf: string
+    requestDate?: Date
 }
