@@ -1,3 +1,4 @@
+import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 import { OrderItem } from './OrderItem'
 import { DiscountCoupon } from './DiscountCoupon'
 import { Cpf } from './Cpf'
@@ -17,6 +18,7 @@ export class Order {
     }
 
     public addItem(item: OrderItem) {
+        if (item.quantity < 0) throw new InvalidAttributeError('quantity')
         this.orderItems.push(
             new OrderItem({ quantity: item.quantity, product: item.product })
         )
