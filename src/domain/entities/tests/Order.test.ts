@@ -20,11 +20,13 @@ type MakeBaseOrderTypes = {
 
 const makeBaseOrder = (): MakeBaseOrderTypes => {
     const firstProduct = new Product({
+        id: 'any_first_product_id',
         name: 'any_first_product',
         price: 10,
         description: 'any_description',
     })
     const secondProduct = new Product({
+        id: 'any_second_product_id',
         name: 'any_second_product',
         price: 15,
         description: 'any_description',
@@ -92,6 +94,16 @@ describe('Order', () => {
         const order = makeSut({})
         expect(() => order.addItem(firstItem)).toThrow(
             new InvalidAttributeError('quantity')
+        )
+    })
+
+    it('Deve lançar InvalidAttributeError se um item do pedido for repetido', () => {
+        const { firstItem, secondItem } = makeBaseOrder()
+        const order = makeSut({})
+        order.addItem(firstItem)
+        order.addItem(secondItem)
+        expect(() => order.addItem(firstItem)).toThrow(
+            new InvalidAttributeError('orderItem')
         )
     })
 })
