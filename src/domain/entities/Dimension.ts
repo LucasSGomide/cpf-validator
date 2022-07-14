@@ -18,4 +18,8 @@ export class Dimension {
             ).toFixed(3)
         )
     }
+
+    public getDensity(weight: number) {
+        return Math.round(weight / this.getVolume())
+    }
 }
