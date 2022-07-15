@@ -1,4 +1,4 @@
-import { Product } from './Product'
+import { Product } from '@domain/entities'
 
 export class OrderItem {
     private price: number
@@ -13,6 +13,10 @@ export class OrderItem {
 
     public getPrice() {
         return this.price
+    }
+
+    public getFreight() {
+        return this.product.getFreight() * this.quantity
     }
 
     private calculatesPrice() {
