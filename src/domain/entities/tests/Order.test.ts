@@ -1,9 +1,12 @@
 import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 import { InvalidCpfError } from '@domain/errors/InvalidCpfError'
-import { DiscountCoupon } from '../DiscountCoupon'
-import { Order } from '../Order'
-import { OrderItem } from '../OrderItem'
-import { Product } from '../Product'
+import {
+    Order,
+    OrderItem,
+    DiscountCoupon,
+    Product,
+    Dimension,
+} from '@domain/entities'
 
 type SutTypes = {
     value?: string
@@ -55,7 +58,7 @@ describe('Order', () => {
         order.addItem(firstItem)
         order.addItem(secondItem)
         const price = order.getPrice()
-        expect(price).toBe(1450)
+        expect(price).toBe(1460)
     })
 
     it('Deve calcular corretamente o valor total de um pedido com cupom de desconto expirado', () => {
@@ -70,7 +73,7 @@ describe('Order', () => {
         order.addItem(secondItem)
         order.addCoupon(discountCoupon)
         const price = order.getPrice()
-        expect(price).toBe(1450)
+        expect(price).toBe(1460)
     })
 
     it('Deve calcular corretamente o valor total de um pedido com cupom de desconto válido', () => {
@@ -85,7 +88,46 @@ describe('Order', () => {
         order.addItem(secondItem)
         order.addCoupon(discountCoupon)
         const price = order.getPrice()
-        expect(price).toBe(1305)
+        expect(price).toBe(1315)
+    })
+
+    it('Deve calcular corretamente o valor total de um pedido com frete', () => {
+        const { firstItem, secondItem } = makeBaseOrder()
+        const order = makeSut({})
+        const firstDimension = new Dimension({
+            length: 20,
+            height: 15,
+            width: 10,
+        })
+        const secondDimension = new Dimension({
+            length: 100,
+            height: 30,
+            width: 10,
+        })
+        firstItem.product.dimension = firstDimension
+        firstItem.product.weight = 1
+        secondItem.product.dimension = secondDimension
+        secondItem.product.weight = 3
+        order.addItem(firstItem)
+        order.addItem(secondItem)
+        const price = order.getPrice()
+        expect(price).toBe(3349)
+    })
+
+    it('Deve calcular corretamente o valor total de um pedido com frete mínimo', () => {
+        const { firstItem } = makeBaseOrder()
+        const order = makeSut({})
+        const firstDimension = new Dimension({
+            length: 10,
+            height: 15,
+            width: 10,
+        })
+        firstItem.product.dimension = firstDimension
+        firstItem.product.weight = 1
+        firstItem.quantity = 1
+        order.addItem(firstItem)
+        const price = order.getPrice()
+        expect(price).toBe(20)
     })
 
     it('Deve lançar InvalidAttributeError se um item do pedido possuir quantidade negativa', () => {
