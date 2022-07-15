@@ -1,11 +1,12 @@
 import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
-import { BaseEntity } from './BaseEntity'
+import { BaseEntity, Dimension } from '@domain/entities'
 
 export class Product extends BaseEntity {
     name: string
     price: number
     description: string
     weight?: number
+    dimension?: Dimension
 
     constructor({
         id,
@@ -16,13 +17,25 @@ export class Product extends BaseEntity {
         price,
         description,
         weight,
+        dimension,
     }: ProductTypes) {
         super({ id, createdAt, deletedAt, updatedAt })
         this.name = name
         this.price = price
         this.description = description
         this.weight = weight
+        this.dimension = dimension ? new Dimension(dimension) : undefined
         this.validate()
+    }
+
+    public getFreight() {
+        return this.calculatesFreight()
+    }
+
+    private calculatesFreight() {
+        const volume = this.dimension.getVolume()
+        const density = this.dimension.getDensity(this.weight)
+        return 1000 * volume * (density / 100)
     }
 
     private validate() {
@@ -39,4 +52,5 @@ type ProductTypes = {
     price: number
     description: string
     weight?: number
+    dimension?: Dimension
 }
