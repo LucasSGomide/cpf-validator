@@ -4,6 +4,7 @@ import { DiscountCoupon } from './DiscountCoupon'
 import { Cpf } from './Cpf'
 
 export class Order {
+    private minFreight = 10
     cpf: Cpf
     requestDate?: Date
     price?: number
@@ -32,7 +33,7 @@ export class Order {
     }
 
     public getPrice() {
-        const price = this.calculatesPrice()
+        const price = this.calculatesPrice() + this.calculatesFreight()
         return price
     }
 
@@ -47,8 +48,6 @@ export class Order {
             }
             return total - this.discountCoupon.getDiscount(total)
         }
-        total += this.calculatesFreight()
-
         return total
     }
 
@@ -57,7 +56,7 @@ export class Order {
         this.orderItems.forEach((item) => {
             total += item.getFreight()
         })
-        return total
+        return total > this.minFreight ? total : this.minFreight
     }
 
     private isDuplicatedItem(item: OrderItem): boolean {
