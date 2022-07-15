@@ -1,6 +1,7 @@
 type InvalidAttributeErrorTypes = {
     quantity: string
     orderItem: string
+    dimension: string
 }
 
 export class InvalidAttributeError extends Error {

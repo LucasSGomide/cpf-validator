@@ -1,3 +1,5 @@
+import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
+
 export class Dimension {
     length: number
     height: number
@@ -7,6 +9,7 @@ export class Dimension {
         this.length = length
         this.height = height
         this.width = width
+        this.validate()
     }
 
     public getVolume() {
@@ -21,5 +24,11 @@ export class Dimension {
 
     public getDensity(weight: number) {
         return Math.round(weight / this.getVolume())
+    }
+
+    private validate() {
+        if (this.length < 0 || this.height < 0 || this.width < 0) {
+            throw new InvalidAttributeError('dimension')
+        }
     }
 }
