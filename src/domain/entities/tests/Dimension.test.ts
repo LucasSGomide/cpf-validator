@@ -1,4 +1,5 @@
 import { Dimension } from '@domain/entities/Dimension'
+import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 
 describe('Dimension', () => {
     it('Deve retornar o volume correto de um produto', () => {
@@ -13,4 +14,19 @@ describe('Dimension', () => {
         const density = dimension.getDensity(weight)
         expect(density).toBe(100)
     })
+
+    const dimensions = [
+        { length: -100, height: 30, width: 10 },
+        { length: 100, height: -30, width: 10 },
+        { length: 100, height: 30, width: -10 },
+    ]
+
+    it.each(dimensions)(
+        'Deve lançar erro se existirem dimensões negativas',
+        (dimension) => {
+            expect(() => new Dimension(dimension)).toThrow(
+                new InvalidAttributeError('dimension')
+            )
+        }
+    )
 })
