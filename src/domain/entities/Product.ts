@@ -32,7 +32,8 @@ export class Product extends BaseEntity {
         return this.calculatesFreight()
     }
 
-    private calculatesFreight() {
+    private calculatesFreight(): number {
+        if (!this.dimension) return 0
         const volume = this.dimension.getVolume()
         const density = this.dimension.getDensity(this.weight)
         return 1000 * volume * (density / 100)

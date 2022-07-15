@@ -47,6 +47,16 @@ export class Order {
             }
             return total - this.discountCoupon.getDiscount(total)
         }
+        total += this.calculatesFreight()
+
+        return total
+    }
+
+    private calculatesFreight(): number {
+        let total: number = 0
+        this.orderItems.forEach((item) => {
+            total += item.getFreight()
+        })
         return total
     }
 
