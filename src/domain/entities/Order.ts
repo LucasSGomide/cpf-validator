@@ -5,10 +5,10 @@ import { Cpf } from './Cpf'
 import { Product } from './Product'
 
 export class Order {
-    private minFreight = 10
-    cpf: Cpf
-    orderItems: OrderItem[]
-    discountCoupon?: DiscountCoupon
+    protected freightPrice: number = 0
+    protected cpf: Cpf
+    protected orderItems: OrderItem[]
+    protected discountCoupon?: DiscountCoupon
 
     constructor(cpf: string, readonly requestDate = new Date()) {
         this.orderItems = []
@@ -20,6 +20,7 @@ export class Order {
         if (this.isDuplicatedItem(item)) {
             throw new InvalidAttributeError('orderItem')
         }
+        this.freightPrice += item.getFreight() * quantity
         this.orderItems.push(new OrderItem(item.id, item.price, quantity))
     }
 
@@ -39,6 +40,7 @@ export class Order {
         this.orderItems.forEach((item) => {
             total += item.getPrice()
         })
+        total += this.freightPrice
         if (this.discountCoupon) {
             return total - this.discountCoupon.getDiscount(total)
         }
