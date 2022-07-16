@@ -2,13 +2,13 @@ import { Product } from '@domain/entities'
 import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 
 export class OrderItem {
-    private price: number
-    quantity: number
-    product: Product
-
-    constructor({ quantity, product }: OrderItemTypes) {
+    constructor(
+        readonly idProduct: string,
+        readonly price: number,
+        readonly quantity: number
+    ) {
         this.quantity = quantity
-        this.product = new Product(product)
+
         this.price = this.calculatesPrice()
         if (this.quantity < 0) throw new InvalidAttributeError('quantity')
     }
@@ -17,12 +17,8 @@ export class OrderItem {
         return this.price
     }
 
-    public getFreight() {
-        return this.product.getFreight() * this.quantity
-    }
-
     private calculatesPrice() {
-        return this.quantity * this.product.price
+        return this.quantity * this.price
     }
 }
 

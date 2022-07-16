@@ -1,12 +1,12 @@
 export class DiscountCoupon {
-    percentage: number
-    name: string
-    expireDate?: Date
-
-    constructor({ percentage, expireDate, name }: DiscountCouponTypes) {
-        this.percentage = percentage
+    constructor(
+        readonly name: string,
+        readonly percentage: number,
+        readonly expireDate: Date
+    ) {
         this.name = name
-        this.expireDate = expireDate
+        this.percentage = percentage
+        this.expireDate = new Date(expireDate)
     }
 
     public getDiscount(total: number) {
@@ -21,10 +21,4 @@ export class DiscountCoupon {
     private calculatesDiscount(total: number) {
         return total * (this.percentage / 100)
     }
-}
-
-type DiscountCouponTypes = {
-    expireDate?: Date
-    percentage: number
-    name: string
 }

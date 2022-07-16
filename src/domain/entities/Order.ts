@@ -2,6 +2,7 @@ import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 import { OrderItem } from './OrderItem'
 import { DiscountCoupon } from './DiscountCoupon'
 import { Cpf } from './Cpf'
+import { Product } from './Product'
 
 export class Order {
     private minFreight = 10
@@ -15,22 +16,21 @@ export class Order {
         this.requestDate = requestDate || new Date()
     }
 
-    public addItem(item: OrderItem) {
+    public addItem(item: Product, quantity: number) {
         if (this.isDuplicatedItem(item)) {
             throw new InvalidAttributeError('orderItem')
         }
-        this.orderItems.push(
-            new OrderItem({ quantity: item.quantity, product: item.product })
-        )
+        this.orderItems.push(new OrderItem(item.id, item.price, quantity))
     }
 
     public addCoupon(discountCoupon: DiscountCoupon) {
         if (discountCoupon.isExpired(this.requestDate)) return
-        this.discountCoupon = new DiscountCoupon(discountCoupon)
+        const { name, percentage, expireDate } = discountCoupon
+        this.discountCoupon = new DiscountCoupon(name, percentage, expireDate)
     }
 
     public getPrice() {
-        const price = this.calculatesPrice() + this.calculatesFreight()
+        const price = this.calculatesPrice()
         return price
     }
 
@@ -45,17 +45,9 @@ export class Order {
         return total
     }
 
-    private calculatesFreight(): number {
-        let total: number = 0
-        this.orderItems.forEach((item) => {
-            total += item.getFreight()
-        })
-        return total > this.minFreight ? total : this.minFreight
-    }
-
-    private isDuplicatedItem(item: OrderItem): boolean {
+    private isDuplicatedItem(product: Product): boolean {
         return this.orderItems.some(
-            (orderItem) => orderItem.product.id === item.product.id
+            (orderItem) => orderItem.idProduct === product.id
         )
     }
 }
