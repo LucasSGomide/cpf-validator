@@ -5,7 +5,7 @@ type SutParams = {
     value: string
 }
 
-const makeSut = ({ value }: SutParams) => new Cpf({ value })
+const makeSut = ({ value }: SutParams) => new Cpf(value)
 const testInvalidCpf = (cpf: string) =>
     expect(() => makeSut({ value: cpf })).toThrow(new InvalidCpfError())
 

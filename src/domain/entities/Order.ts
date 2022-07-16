@@ -11,7 +11,7 @@ export class Order {
 
     constructor(cpf: string, readonly requestDate = new Date()) {
         this.orderItems = []
-        this.cpf = new Cpf({ value: cpf })
+        this.cpf = new Cpf(cpf)
         this.requestDate = requestDate || new Date()
     }
 
