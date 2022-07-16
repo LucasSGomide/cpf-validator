@@ -1,12 +1,6 @@
 import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 import { InvalidCpfError } from '@domain/errors/InvalidCpfError'
-import {
-    Order,
-    OrderItem,
-    DiscountCoupon,
-    Product,
-    Dimension,
-} from '@domain/entities'
+import { Order, DiscountCoupon, Product, Dimension } from '@domain/entities'
 
 type SutTypes = {
     value?: string
@@ -16,34 +10,36 @@ type SutTypes = {
 const makeSut = ({ value, requestDate }: SutTypes) =>
     new Order(value || '473.491.640-33', requestDate)
 
-type MakeBaseOrderTypes = {
-    firstItem: OrderItem
-    secondItem: OrderItem
+type MakeBaseOrderParams = {
+    firstDimension?: Dimension
+    secondDimension?: Dimension
 }
 
-const makeBaseOrder = (): MakeBaseOrderTypes => {
-    const firstProduct = new Product({
-        id: 'any_first_product_id',
-        name: 'any_first_product',
-        price: 10,
-        description: 'any_description',
-    })
-    const secondProduct = new Product({
-        id: 'any_second_product_id',
-        name: 'any_second_product',
-        price: 15,
-        description: 'any_description',
-    })
-    const firstItem = new OrderItem({
-        quantity: 100,
-        product: firstProduct,
-    })
-    const secondItem = new OrderItem({
-        quantity: 30,
-        product: secondProduct,
-    })
+type MakeBaseOrderTypes = {
+    firstProduct: Product
+    secondProduct: Product
+}
 
-    return { firstItem, secondItem }
+const makeBaseOrder = ({
+    firstDimension,
+    secondDimension,
+}: MakeBaseOrderParams): MakeBaseOrderTypes => {
+    const firstProduct = new Product(
+        'any_first_product_id',
+        'any_first_product',
+        'any_description',
+        10,
+        firstDimension
+    )
+    const secondProduct = new Product(
+        'any_second_product_id',
+        'any_second_product',
+        'any_description',
+        15,
+        secondDimension
+    )
+
+    return { firstProduct, secondProduct }
 }
 
 describe('Order', () => {
@@ -53,98 +49,77 @@ describe('Order', () => {
     })
 
     it('Deve calcular corretamente o valor total de um pedido sem cupom de desconto', () => {
-        const { firstItem, secondItem } = makeBaseOrder()
+        const { firstProduct, secondProduct } = makeBaseOrder({})
         const order = makeSut({})
-        order.addItem(firstItem)
-        order.addItem(secondItem)
+        order.addItem(firstProduct, 100)
+        order.addItem(secondProduct, 30)
         const price = order.getPrice()
-        expect(price).toBe(1460)
+        expect(price).toBe(1450)
     })
 
     it('Deve calcular corretamente o valor total de um pedido com cupom de desconto expirado', () => {
-        const { firstItem, secondItem } = makeBaseOrder()
-        const discountCoupon = new DiscountCoupon({
-            name: 'any',
-            percentage: 10,
-            expireDate: new Date('2022-05-01T10:00:00Z'),
-        })
+        const { firstProduct, secondProduct } = makeBaseOrder({})
+        const expireDate = new Date('2022-05-01T10:00:00Z')
+        const discountCoupon = new DiscountCoupon('any', 10, expireDate)
         const order = makeSut({})
-        order.addItem(firstItem)
-        order.addItem(secondItem)
+        order.addItem(firstProduct, 100)
+        order.addItem(secondProduct, 30)
         order.addCoupon(discountCoupon)
         const price = order.getPrice()
-        expect(price).toBe(1460)
+        expect(price).toBe(1450)
     })
 
     it('Deve calcular corretamente o valor total de um pedido com cupom de desconto válido', () => {
-        const { firstItem, secondItem } = makeBaseOrder()
-        const discountCoupon = new DiscountCoupon({
-            name: 'any',
-            percentage: 10,
-            expireDate: new Date('2022-08-01T10:00:00Z'),
-        })
+        const { firstProduct, secondProduct } = makeBaseOrder({})
+        const expiredate = new Date('2022-08-01T10:00:00Z')
+        const discountCoupon = new DiscountCoupon('any', 10, expiredate)
         const order = makeSut({ requestDate: new Date('2022-08-01T10:00:00Z') })
-        order.addItem(firstItem)
-        order.addItem(secondItem)
+        order.addItem(firstProduct, 100)
+        order.addItem(secondProduct, 30)
         order.addCoupon(discountCoupon)
         const price = order.getPrice()
-        expect(price).toBe(1315)
+        expect(price).toBe(1305)
     })
 
-    it('Deve calcular corretamente o valor total de um pedido com frete', () => {
-        const { firstItem, secondItem } = makeBaseOrder()
-        const order = makeSut({})
-        const firstDimension = new Dimension({
-            length: 20,
-            height: 15,
-            width: 10,
-        })
-        const secondDimension = new Dimension({
-            length: 100,
-            height: 30,
-            width: 10,
-        })
-        firstItem.product.dimension = firstDimension
-        firstItem.product.weight = 1
-        secondItem.product.dimension = secondDimension
-        secondItem.product.weight = 3
-        order.addItem(firstItem)
-        order.addItem(secondItem)
-        const price = order.getPrice()
-        expect(price).toBe(3349)
-    })
+    // TODO - Adicionar nova implementação de calculo de frete
+    // it('Deve calcular corretamente o valor total de um pedido com frete', () => {
+    //     const firstDimension = new Dimension(20, 15, 10, 1)
+    //     const secondDimension = new Dimension(100, 30, 10, 3)
+    //     const { firstProduct, secondProduct } = makeBaseOrder({
+    //         firstDimension,
+    //         secondDimension,
+    //     })
+    //     const order = makeSut({})
 
-    it('Deve calcular corretamente o valor total de um pedido com frete mínimo', () => {
-        const { firstItem } = makeBaseOrder()
-        const order = makeSut({})
-        const firstDimension = new Dimension({
-            length: 10,
-            height: 15,
-            width: 10,
-        })
-        firstItem.product.dimension = firstDimension
-        firstItem.product.weight = 1
-        firstItem.quantity = 1
-        order.addItem(firstItem)
-        const price = order.getPrice()
-        expect(price).toBe(20)
-    })
+    //     order.addItem(firstProduct, 10)
+    //     order.addItem(secondProduct, 10)
+    //     const price = order.getPrice()
+    //     expect(price).toBe(3349)
+    // })
+
+    // it('Deve calcular corretamente o valor total de um pedido com frete mínimo', () => {
+    //     const firstDimension = new Dimension(20, 15, 10, 1)
+    //     const { firstProduct } = makeBaseOrder({ firstDimension })
+    //     const order = makeSut({})
+    //     order.addItem(firstProduct, 1)
+    //     const price = order.getPrice()
+    //     expect(price).toBe(20)
+    // })
 
     it('Deve lançar InvalidAttributeError se um item do pedido possuir quantidade negativa', () => {
-        const { firstItem } = makeBaseOrder()
-        firstItem.quantity = -5
+        const { firstProduct } = makeBaseOrder({})
         const order = makeSut({})
-        expect(() => order.addItem(firstItem)).toThrow(
+        expect(() => order.addItem(firstProduct, -5)).toThrow(
             new InvalidAttributeError('quantity')
         )
     })
 
     it('Deve lançar InvalidAttributeError se um item do pedido for repetido', () => {
-        const { firstItem, secondItem } = makeBaseOrder()
+        const { firstProduct, secondProduct } = makeBaseOrder({})
         const order = makeSut({})
-        order.addItem(firstItem)
-        order.addItem(secondItem)
-        expect(() => order.addItem(firstItem)).toThrow(
+        order.addItem(firstProduct, 10)
+        order.addItem(secondProduct, 10)
+        expect(() => order.addItem(firstProduct, 10)).toThrow(
             new InvalidAttributeError('orderItem')
         )
     })
