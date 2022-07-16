@@ -81,30 +81,28 @@ describe('Order', () => {
         expect(price).toBe(1305)
     })
 
-    // TODO - Adicionar nova implementação de calculo de frete
-    // it('Deve calcular corretamente o valor total de um pedido com frete', () => {
-    //     const firstDimension = new Dimension(20, 15, 10, 1)
-    //     const secondDimension = new Dimension(100, 30, 10, 3)
-    //     const { firstProduct, secondProduct } = makeBaseOrder({
-    //         firstDimension,
-    //         secondDimension,
-    //     })
-    //     const order = makeSut({})
+    it('Deve calcular corretamente o valor total de um pedido com frete', () => {
+        const firstDimension = new Dimension(20, 15, 10, 1)
+        const secondDimension = new Dimension(100, 30, 10, 3)
+        const { firstProduct, secondProduct } = makeBaseOrder({
+            firstDimension,
+            secondDimension,
+        })
+        const order = makeSut({})
+        order.addItem(firstProduct, 100)
+        order.addItem(secondProduct, 30)
+        const price = order.getPrice()
+        expect(price).toBe(3350)
+    })
 
-    //     order.addItem(firstProduct, 10)
-    //     order.addItem(secondProduct, 10)
-    //     const price = order.getPrice()
-    //     expect(price).toBe(3349)
-    // })
-
-    // it('Deve calcular corretamente o valor total de um pedido com frete mínimo', () => {
-    //     const firstDimension = new Dimension(20, 15, 10, 1)
-    //     const { firstProduct } = makeBaseOrder({ firstDimension })
-    //     const order = makeSut({})
-    //     order.addItem(firstProduct, 1)
-    //     const price = order.getPrice()
-    //     expect(price).toBe(20)
-    // })
+    it('Deve calcular corretamente o valor total de um pedido com frete mínimo', () => {
+        const firstDimension = new Dimension(20, 15, 10, 0.7)
+        const { firstProduct } = makeBaseOrder({ firstDimension })
+        const order = makeSut({})
+        order.addItem(firstProduct, 1)
+        const price = order.getPrice()
+        expect(price).toBe(20)
+    })
 
     it('Deve lançar InvalidAttributeError se um item do pedido possuir quantidade negativa', () => {
         const { firstProduct } = makeBaseOrder({})
