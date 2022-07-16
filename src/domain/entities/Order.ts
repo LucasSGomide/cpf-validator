@@ -13,7 +13,7 @@ export class Order {
     constructor(cpf: string, readonly requestDate = new Date()) {
         this.orderItems = []
         this.cpf = new Cpf(cpf)
-        this.requestDate = requestDate || new Date()
+        this.requestDate = requestDate
     }
 
     public addItem(item: Product, quantity: number) {
