@@ -37,6 +37,7 @@ module.exports = {
         'object-curly-newline': 'off',
         'max-classes-per-file': 'off',
         'function-paren-newline': 'off',
+        'import/no-cycle': 'off',
     },
     settings: {
         'import/resolver': {

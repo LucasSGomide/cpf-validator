@@ -1,26 +1,16 @@
-import { BaseEntity } from './BaseEntity'
-import { Product } from './Product'
+import { Product } from '@domain/entities'
+import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 
-export class OrderItem extends BaseEntity {
-    private price: number
-    orderId?: string
-    quantity: number
-    product: Product
-
-    constructor({
-        id,
-        createdAt,
-        deletedAt,
-        updatedAt,
-        orderId,
-        quantity,
-        product,
-    }: OrderItemTypes) {
-        super({ id, createdAt, deletedAt, updatedAt })
-        this.orderId = orderId
+export class OrderItem {
+    constructor(
+        readonly idProduct: string,
+        readonly price: number,
+        readonly quantity: number
+    ) {
         this.quantity = quantity
-        this.product = new Product(product)
+
         this.price = this.calculatesPrice()
+        if (this.quantity < 0) throw new InvalidAttributeError('quantity')
     }
 
     public getPrice() {
@@ -28,16 +18,11 @@ export class OrderItem extends BaseEntity {
     }
 
     private calculatesPrice() {
-        return this.quantity * this.product.price
+        return this.quantity * this.price
     }
 }
 
 export type OrderItemTypes = {
-    id?: string
-    createdAt?: Date
-    deletedAt?: Date
-    updatedAt?: Date
-    orderId?: string
     quantity: number
     product: Product
 }

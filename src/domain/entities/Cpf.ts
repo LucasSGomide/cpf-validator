@@ -1,32 +1,27 @@
-import { InvalidFieldError } from '@domain/errors/InvalidFieldError'
-import { ICpfValidation } from '@domain/validations/ICPfValidation'
-import { IValidation } from '@domain/validations/IValidation'
+import { InvalidCpfError } from '@domain/errors/InvalidCpfError'
 
-export class CpfValidation implements ICpfValidation {
+export class Cpf {
     readonly firstFactor = 10
     readonly secondFactor = 11
-    private value: string
 
-    constructor(private validators: IValidation[]) {}
-
-    static build(validators: IValidation[]) {
-        return new CpfValidation(validators)
+    constructor(readonly value: string) {
+        if (!this.validate(value)) throw new InvalidCpfError()
+        this.value = value
     }
 
     getValue() {
         return this.value
     }
 
-    execute(cpf: string): Error {
+    validate(cpf: string): boolean {
         const value = this.sanitizeCpf(cpf)
-        this.validators.forEach((validator) => validator.execute(value))
+        if (this.isInvalidLength(value)) return false
+        if (this.isAllEqualCharacters(value)) return false
         const digitsToValidate = this.getDigitsToValidate(value)
         const firstDigit = this.calculatesValidDigit(value, this.firstFactor)
         const secondDigit = this.calculatesValidDigit(value, this.secondFactor)
         const validDigits = `${firstDigit}${secondDigit}`
-        if (validDigits !== digitsToValidate) throw new InvalidFieldError()
-        this.value = value
-        return null
+        return validDigits === digitsToValidate
     }
 
     private sanitizeCpf(value: string): string {
@@ -36,6 +31,16 @@ export class CpfValidation implements ICpfValidation {
     private getDigitsToValidate(cpf: string): string {
         const lastTwoCharacters = -2
         return cpf.slice(lastTwoCharacters)
+    }
+
+    private isAllEqualCharacters(cpf: string) {
+        const firstCharacter = cpf[0]
+        return [...cpf].every((character) => character === firstCharacter)
+    }
+
+    private isInvalidLength(cpf: string) {
+        const cpfLength = 11
+        return cpf.length !== cpfLength
     }
 
     private calculatesValidDigit(cpf: string, factor: number): number {
@@ -48,7 +53,6 @@ export class CpfValidation implements ICpfValidation {
                 multiplier -= 1
             }
         })
-
         const rest = total % 11
         return rest < 2 ? 0 : 11 - rest
     }

@@ -1,46 +1,38 @@
-import { BaseEntity } from './BaseEntity'
+import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 import { OrderItem } from './OrderItem'
-import { DiscountCoupon } from './DicountCoupon'
+import { DiscountCoupon } from './DiscountCoupon'
+import { Cpf } from './Cpf'
+import { Product } from './Product'
 
-export class Order extends BaseEntity {
-    number?: number
-    price?: number
-    freightPrice?: number
-    taxPrice?: number
-    subtotal?: number
-    userId: string
-    orderItems: OrderItem[]
-    discountCoupon?: DiscountCoupon
+export class Order {
+    protected freightPrice: number = 0
+    protected cpf: Cpf
+    protected orderItems: OrderItem[]
+    protected discountCoupon?: DiscountCoupon
 
-    constructor({
-        id,
-        createdAt,
-        deletedAt,
-        updatedAt,
-        userId,
-        number,
-        price,
-        freightPrice,
-        taxPrice,
-        subtotal,
-        orderItems,
-        discountCoupon,
-    }: OrderTypes) {
-        super({ id, createdAt, deletedAt, updatedAt })
-        this.userId = userId
-        this.number = number
-        this.freightPrice = freightPrice
-        this.taxPrice = taxPrice
-        this.subtotal = subtotal
-        this.orderItems = orderItems.map((item) => new OrderItem(item))
-        this.discountCoupon = discountCoupon
-            ? new DiscountCoupon(discountCoupon)
-            : null
-        this.price = price || this.calculatesPrice()
+    constructor(cpf: string, readonly requestDate = new Date()) {
+        this.orderItems = []
+        this.cpf = new Cpf(cpf)
+        this.requestDate = requestDate
+    }
+
+    public addItem(item: Product, quantity: number) {
+        if (this.isDuplicatedItem(item)) {
+            throw new InvalidAttributeError('orderItem')
+        }
+        this.freightPrice += item.getFreight() * quantity
+        this.orderItems.push(new OrderItem(item.id, item.price, quantity))
+    }
+
+    public addCoupon(discountCoupon: DiscountCoupon) {
+        if (discountCoupon.isExpired(this.requestDate)) return
+        const { name, percentage, expireDate } = discountCoupon
+        this.discountCoupon = new DiscountCoupon(name, percentage, expireDate)
     }
 
     public getPrice() {
-        return this.price
+        const price = this.calculatesPrice()
+        return price
     }
 
     private calculatesPrice(): number {
@@ -48,25 +40,21 @@ export class Order extends BaseEntity {
         this.orderItems.forEach((item) => {
             total += item.getPrice()
         })
+        total += this.freightPrice
         if (this.discountCoupon) {
-            const { discountPercentage } = this.discountCoupon
-            return (total * (100 - discountPercentage)) / 100
+            return total - this.discountCoupon.getDiscount(total)
         }
         return total
+    }
+
+    private isDuplicatedItem(product: Product): boolean {
+        return this.orderItems.some(
+            (orderItem) => orderItem.idProduct === product.id
+        )
     }
 }
 
 export type OrderTypes = {
-    id?: string
-    createdAt?: Date
-    deletedAt?: Date
-    updatedAt?: Date
-    userId: string
-    number?: number
-    price?: number
-    freightPrice?: number
-    taxPrice?: number
-    subtotal?: number
-    orderItems: OrderItem[]
-    discountCoupon?: DiscountCoupon
+    cpf: string
+    requestDate?: Date
 }
