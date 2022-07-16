@@ -1,4 +1,4 @@
-import { BaseEntity, Dimension } from '@domain/entities'
+import { BaseEntity, Dimension, FreightCalculator } from '@domain/entities'
 
 export class Product extends BaseEntity {
     constructor(
@@ -16,13 +16,14 @@ export class Product extends BaseEntity {
     }
 
     public getFreight() {
-        return this.calculatesFreight()
+        return FreightCalculator.calculate(this)
     }
 
-    private calculatesFreight(): number {
-        if (!this.dimension) return 0
-        const volume = this.dimension.getVolume()
-        const density = this.dimension.getDensity()
-        return 1000 * volume * (density / 100)
+    getVolume() {
+        return this.dimension.getVolume()
+    }
+
+    getDensity() {
+        return this.dimension.getDensity()
     }
 }
