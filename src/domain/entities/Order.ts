@@ -6,13 +6,10 @@ import { Cpf } from './Cpf'
 export class Order {
     private minFreight = 10
     cpf: Cpf
-    requestDate?: Date
-    price?: number
-    freightPrice?: number
     orderItems: OrderItem[]
     discountCoupon?: DiscountCoupon
 
-    constructor({ cpf, requestDate }: OrderTypes) {
+    constructor(cpf: string, readonly requestDate = new Date()) {
         this.orderItems = []
         this.cpf = new Cpf({ value: cpf })
         this.requestDate = requestDate || new Date()

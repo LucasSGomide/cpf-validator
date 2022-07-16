@@ -14,7 +14,7 @@ type SutTypes = {
 }
 
 const makeSut = ({ value, requestDate }: SutTypes) =>
-    new Order({ cpf: value || '473.491.640-33', requestDate })
+    new Order(value || '473.491.640-33', requestDate)
 
 type MakeBaseOrderTypes = {
     firstItem: OrderItem
@@ -49,7 +49,7 @@ const makeBaseOrder = (): MakeBaseOrderTypes => {
 describe('Order', () => {
     it('Não deve criar um pedido com CPF inválido', () => {
         const cpf = '111.111.111-11'
-        expect(() => new Order({ cpf })).toThrow(new InvalidCpfError())
+        expect(() => new Order(cpf)).toThrow(new InvalidCpfError())
     })
 
     it('Deve calcular corretamente o valor total de um pedido sem cupom de desconto', () => {
