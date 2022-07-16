@@ -10,6 +10,7 @@ export class Dimension {
         this.length = length
         this.height = height
         this.width = width
+        this.weight = weight
         this.validate()
     }
 
