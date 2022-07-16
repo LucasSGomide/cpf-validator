@@ -1,4 +1,5 @@
 import { Product } from '@domain/entities'
+import { InvalidAttributeError } from '@domain/errors/InvalidAttributeError'
 
 export class OrderItem {
     private price: number
@@ -9,6 +10,7 @@ export class OrderItem {
         this.quantity = quantity
         this.product = new Product(product)
         this.price = this.calculatesPrice()
+        if (this.quantity < 0) throw new InvalidAttributeError('quantity')
     }
 
     public getPrice() {

@@ -19,7 +19,6 @@ export class Order {
     }
 
     public addItem(item: OrderItem) {
-        if (item.quantity < 0) throw new InvalidAttributeError('quantity')
         if (this.isDuplicatedItem(item)) {
             throw new InvalidAttributeError('orderItem')
         }
@@ -29,6 +28,7 @@ export class Order {
     }
 
     public addCoupon(discountCoupon: DiscountCoupon) {
+        if (discountCoupon.isExpired(this.requestDate)) return
         this.discountCoupon = new DiscountCoupon(discountCoupon)
     }
 
@@ -43,9 +43,6 @@ export class Order {
             total += item.getPrice()
         })
         if (this.discountCoupon) {
-            if (this.discountCoupon.isExpired(this.requestDate)) {
-                return total
-            }
             return total - this.discountCoupon.getDiscount(total)
         }
         return total
