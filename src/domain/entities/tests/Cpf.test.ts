@@ -9,9 +9,8 @@ const makeSut = ({ value }: SutParams) => new Cpf(value)
 const testInvalidCpf = (cpf: string) =>
     expect(() => makeSut({ value: cpf })).toThrow(new InvalidCpfError())
 
-describe('CpfValidation', () => {
+describe('Cpf', () => {
     const validCpfs = ['473.491.640-33', '47349164033']
-
     test.each(validCpfs)(
         'Deve retornar validar um CPF valido',
         (cpf: string) => {
