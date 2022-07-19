@@ -1,5 +1,5 @@
 import sqlite3 from 'sqlite3'
-import { makeDatabase } from './DatabaseFactory'
+import { makeDatabaseTables } from './DatabaseFactory'
 
 export const database = new sqlite3.Database(':memory:', (err) => {
     if (err) {
@@ -9,4 +9,4 @@ export const database = new sqlite3.Database(':memory:', (err) => {
     console.log('SQLite database connected...')
 })
 
-makeDatabase(database)
+makeDatabaseTables(database)
