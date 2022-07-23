@@ -1,10 +1,10 @@
 import { InvalidCpfError } from '@domain/errors/InvalidCpfError'
 
 export class Cpf {
-    readonly firstFactor = 10
-    readonly secondFactor = 11
+    private readonly firstFactor = 10
+    private readonly secondFactor = 11
 
-    constructor(readonly value: string) {
+    constructor(private readonly value: string) {
         if (!this.validate(value)) throw new InvalidCpfError()
         this.value = value
     }
@@ -13,7 +13,7 @@ export class Cpf {
         return this.value
     }
 
-    validate(cpf: string): boolean {
+    private validate(cpf: string): boolean {
         const value = this.sanitizeCpf(cpf)
         if (this.isInvalidLength(value)) return false
         if (this.isAllEqualCharacters(value)) return false
