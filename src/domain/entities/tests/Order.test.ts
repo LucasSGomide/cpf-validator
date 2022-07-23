@@ -5,10 +5,11 @@ import { Order, DiscountCoupon, Product, Dimension } from '@domain/entities'
 type SutTypes = {
     value?: string
     requestDate?: Date
+    sequence?: number
 }
 
-const makeSut = ({ value, requestDate }: SutTypes) =>
-    new Order(value || '473.491.640-33', requestDate)
+const makeSut = ({ value, requestDate, sequence }: SutTypes) =>
+    new Order(value || '473.491.640-33', requestDate, sequence)
 
 type MakeBaseOrderParams = {
     firstDimension?: Dimension
@@ -120,5 +121,14 @@ describe('Order', () => {
         expect(() => order.addItem(firstProduct, 10)).toThrow(
             new InvalidAttributeError('orderItem')
         )
+    })
+
+    it('Deve gerar o código do pedido corretamente', () => {
+        const order = makeSut({
+            requestDate: new Date('2022-05-05T00:00:00'),
+            sequence: 2,
+        })
+        const code = order.getCode()
+        expect(code).toBe('202200000002')
     })
 })
