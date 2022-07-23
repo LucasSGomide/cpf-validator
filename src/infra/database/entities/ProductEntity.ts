@@ -4,13 +4,13 @@ import { Entity, Column, PrimaryColumn, Generated } from 'typeorm'
 export class ProductEntity {
     @PrimaryColumn()
     @Generated('uuid')
-    id?: number
+    id!: string
 
     @Column({ type: 'text', nullable: false })
-    name: string
+    name!: string
 
     @Column({ type: 'text', nullable: false })
-    description: string
+    description!: string
 
     @Column({ type: 'decimal', nullable: false })
     price!: number

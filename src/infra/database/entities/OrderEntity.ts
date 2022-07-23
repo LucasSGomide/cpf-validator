@@ -1,20 +1,11 @@
-import {
-    Entity,
-    Column,
-    PrimaryColumn,
-    Generated,
-    OneToOne,
-    JoinColumn,
-    OneToMany,
-} from 'typeorm'
-import { DiscountCouponEntity } from './DiscountCouponEntity'
+import { Entity, Column, PrimaryColumn, Generated, OneToMany } from 'typeorm'
 import { OrderItemEntity } from './OrderItemEntity'
 
 @Entity({ name: 'Order' })
 export class OrderEntity {
     @PrimaryColumn()
     @Generated('uuid')
-    id?: number
+    id!: string
 
     @Column({ type: 'datetime', nullable: false })
     request_date!: Date
@@ -25,12 +16,17 @@ export class OrderEntity {
     @Column({ type: 'text', nullable: false })
     code!: string
 
-    @Column({ type: 'decimal', default: 0 })
+    @Column({ type: 'decimal' })
     price!: number
 
-    @OneToOne(() => DiscountCouponEntity)
-    @JoinColumn()
-    discount_coupon?: DiscountCouponEntity
+    @Column({ type: 'decimal', default: 0 })
+    freight_price!: number
+
+    @Column({ type: 'integer', nullable: true })
+    coupon_code?: string
+
+    @Column({ type: 'integer', nullable: true })
+    coupon_percentage?: number
 
     @OneToMany(() => OrderItemEntity, (order_item) => order_item.order)
     order_items: OrderItemEntity[]

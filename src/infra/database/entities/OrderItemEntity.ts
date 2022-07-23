@@ -14,15 +14,16 @@ import { ProductEntity } from './ProductEntity'
 export class OrderItemEntity {
     @PrimaryColumn()
     @Generated('uuid')
-    id?: number
+    id!: string
 
     @Column({ type: 'integer', nullable: false })
     quantity!: number
 
     @OneToOne(() => ProductEntity)
-    @JoinColumn()
+    @JoinColumn({ name: 'product_id' })
     product: ProductEntity
 
     @ManyToOne(() => OrderEntity, (order) => order.order_items)
+    @JoinColumn({ name: 'order_id' })
     order: OrderEntity
 }
