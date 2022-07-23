@@ -7,11 +7,11 @@ import {
     JoinColumn,
     ManyToOne,
 } from 'typeorm'
-import { Order } from './OrderEntity'
-import { Product } from './ProductEntity'
+import { OrderEntity } from './OrderEntity'
+import { ProductEntity } from './ProductEntity'
 
-@Entity()
-export class OrderItem {
+@Entity({ name: 'OrderItem' })
+export class OrderItemEntity {
     @PrimaryColumn()
     @Generated('uuid')
     id?: number
@@ -19,10 +19,10 @@ export class OrderItem {
     @Column({ type: 'integer', nullable: false })
     quantity!: number
 
-    @OneToOne(() => Product)
+    @OneToOne(() => ProductEntity)
     @JoinColumn()
-    product: Product
+    product: ProductEntity
 
-    @ManyToOne(() => Order, (order) => order.order_items)
-    order: Order
+    @ManyToOne(() => OrderEntity, (order) => order.order_items)
+    order: OrderEntity
 }

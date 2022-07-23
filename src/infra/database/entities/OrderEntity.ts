@@ -7,8 +7,8 @@ import {
     JoinColumn,
     OneToMany,
 } from 'typeorm'
-import { DiscountCoupon } from './DiscountCouponEntity'
-import { OrderItem } from './OrderItemEntity'
+import { DiscountCouponEntity } from './DiscountCouponEntity'
+import { OrderItemEntity } from './OrderItemEntity'
 
 @Entity({ name: 'Order' })
 export class OrderEntity {
@@ -28,10 +28,10 @@ export class OrderEntity {
     @Column({ type: 'decimal', default: 0 })
     price!: number
 
-    @OneToOne(() => DiscountCoupon)
+    @OneToOne(() => DiscountCouponEntity)
     @JoinColumn()
-    discount_coupon?: DiscountCoupon
+    discount_coupon?: DiscountCouponEntity
 
-    @OneToMany(() => OrderItem, (order_item) => order_item.order)
-    order_items: OrderItem[]
+    @OneToMany(() => OrderItemEntity, (order_item) => order_item.order)
+    order_items: OrderItemEntity[]
 }
