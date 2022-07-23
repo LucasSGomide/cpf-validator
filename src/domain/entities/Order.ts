@@ -3,17 +3,24 @@ import { OrderItem } from './OrderItem'
 import { DiscountCoupon } from './DiscountCoupon'
 import { Cpf } from './Cpf'
 import { Product } from './Product'
+import { OrderCode } from './OrderCode'
 
 export class Order {
     protected freightPrice: number = 0
     protected cpf: Cpf
     protected orderItems: OrderItem[]
     protected discountCoupon?: DiscountCoupon
+    protected code: OrderCode
 
-    constructor(cpf: string, readonly requestDate = new Date()) {
+    constructor(
+        cpf: string,
+        readonly requestDate = new Date(),
+        readonly sequence = 1
+    ) {
         this.orderItems = []
         this.cpf = new Cpf(cpf)
         this.requestDate = requestDate
+        this.code = new OrderCode(sequence, requestDate)
     }
 
     public addItem(item: Product, quantity: number) {
@@ -28,6 +35,10 @@ export class Order {
         if (discountCoupon.isExpired(this.requestDate)) return
         const { name, percentage, expireDate } = discountCoupon
         this.discountCoupon = new DiscountCoupon(name, percentage, expireDate)
+    }
+
+    public getCode() {
+        return this.code.value
     }
 
     public getPrice() {
