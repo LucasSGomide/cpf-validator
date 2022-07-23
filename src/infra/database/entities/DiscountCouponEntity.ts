@@ -4,10 +4,10 @@ import { Entity, Column, PrimaryColumn, Generated } from 'typeorm'
 export class DiscountCouponEntity {
     @PrimaryColumn()
     @Generated('uuid')
-    id?: number
+    id: string
 
     @Column({ type: 'text', nullable: false })
-    name!: string
+    code!: string
 
     @Column({ type: 'decimal', nullable: false })
     percentage!: number

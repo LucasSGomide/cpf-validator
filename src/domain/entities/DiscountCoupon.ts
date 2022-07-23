@@ -1,10 +1,10 @@
 export class DiscountCoupon {
     constructor(
-        readonly name: string,
+        readonly code: string,
         readonly percentage: number,
         readonly expireDate: Date
     ) {
-        this.name = name
+        this.code = code
         this.percentage = percentage
         this.expireDate = new Date(expireDate)
     }
@@ -14,7 +14,7 @@ export class DiscountCoupon {
         return discount
     }
 
-    isExpired(date: Date): boolean {
+    public isExpired(date: Date): boolean {
         return this.expireDate.getTime() < date.getTime()
     }
 

@@ -7,10 +7,10 @@ import { OrderCode } from './OrderCode'
 
 export class Order {
     protected freightPrice: number = 0
-    protected cpf: Cpf
     protected orderItems: OrderItem[]
-    protected discountCoupon?: DiscountCoupon
     protected code: OrderCode
+    discountCoupon?: DiscountCoupon
+    cpf: Cpf
 
     constructor(
         cpf: string,
@@ -33,8 +33,8 @@ export class Order {
 
     public addCoupon(discountCoupon: DiscountCoupon) {
         if (discountCoupon.isExpired(this.requestDate)) return
-        const { name, percentage, expireDate } = discountCoupon
-        this.discountCoupon = new DiscountCoupon(name, percentage, expireDate)
+        const { code, percentage, expireDate } = discountCoupon
+        this.discountCoupon = new DiscountCoupon(code, percentage, expireDate)
     }
 
     public getCode() {
@@ -44,6 +44,10 @@ export class Order {
     public getPrice() {
         const price = this.calculatesPrice()
         return price
+    }
+
+    public getFreightPrice() {
+        return this.freightPrice
     }
 
     private calculatesPrice(): number {
