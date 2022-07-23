@@ -16,7 +16,7 @@ module.exports = {
     rules: {
         semi: 'off',
         indent: 'off',
-        '@typescript-eslint/indent': ['error', 4],
+        '@typescript-eslint/indent': 'off',
         '@typescript-eslint/semi': ['error', 'never'],
         'import/extensions': [
             'error',
