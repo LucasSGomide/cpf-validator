@@ -10,27 +10,27 @@ import {
 import { DiscountCoupon } from './DiscountCouponEntity'
 import { OrderItem } from './OrderItemEntity'
 
-@Entity()
-export class Order {
+@Entity({ name: 'Order' })
+export class OrderEntity {
     @PrimaryColumn()
     @Generated('uuid')
     id?: number
 
     @Column({ type: 'datetime', nullable: false })
-    request_date!: string
+    request_date!: Date
 
     @Column({ type: 'text', nullable: false })
     cpf!: string
 
-    @Column({ type: 'integer', nullable: false })
-    code!: number
+    @Column({ type: 'text', nullable: false })
+    code!: string
 
     @Column({ type: 'decimal', default: 0 })
     price!: number
 
     @OneToOne(() => DiscountCoupon)
     @JoinColumn()
-    discount_coupon: DiscountCoupon
+    discount_coupon?: DiscountCoupon
 
     @OneToMany(() => OrderItem, (order_item) => order_item.order)
     order_items: OrderItem[]
